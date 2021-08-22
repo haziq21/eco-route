@@ -1,27 +1,19 @@
-<!-- <script context="module">
-	export async function load({ fetch }) {
-		const res = await fetch('/api/bus-arrivals');
-		const data = await res.json();
-		console.log('data fetched');
-
-		if (res.ok) {
-			return {
-				props: {
-					data
-				}
-			};
-		}
-
-		return {
-			status: res.status,
-			error: new Error(`Could not load /api/bus-arrivals`)
-		};
-	}
-</script> -->
 <script>
 	import Box from '$lib/Box.svelte';
+	import Searchbar from '$lib/Searchbar.svelte';
+	import { onMount } from 'svelte';
+
+	onMount(async () => {
+		try {
+			const registration = await navigator.serviceWorker.register('/sw.js');
+			console.log('ServiceWorker registration successful with scope: ', registration.scope);
+		} catch (e) {
+			console.log('ServiceWorker registration failed: ', e);
+		}
+	});
 
 	async function getBusArrivals() {
+		console.log('getBusArrivals()');
 		const res = await fetch('/api/bus-arrivals');
 		const data = await res.json();
 
@@ -31,9 +23,11 @@
 
 <Box>
 	<h1>Bus arrivals</h1>
+	<Searchbar placeholder="Search for a bus number or stop" />
 	{#await getBusArrivals()}
-		loading...
+		<p>loading...</p>
 	{:then response}
-		{response}
+		{console.log('showing res')}
+		<p>{response}</p>
 	{/await}
 </Box>
