@@ -7,11 +7,13 @@
 <input type="text" {placeholder} value={defaultText} bind:this={ref} on:click />
 
 <style>
-	input {
+	input[type='text'] {
+		-webkit-appearance: none;
+		-moz-appearance: none;
+		appearance: none;
+
 		width: 100%;
 		padding: 9px;
-		/* margin: 0 auto; */
-		/* margin-bottom: 5px; */
 		background-color: var(--input-field);
 		color: var(--icon-text);
 		opacity: 1;
