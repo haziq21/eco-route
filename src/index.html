@@ -7,34 +7,11 @@
 	<link rel="icon" href="/favicon.png" />
 	<meta name="viewport" content="width=device-width, initial-scale=1" />
 
-	
-
-		
-
-		<link rel="modulepreload" href="/_app/start-4609a0b3.js">
-		<link rel="modulepreload" href="/_app/chunks/vendor-e4a2e6fe.js">
-		<link rel="stylesheet" href="/_app/assets/start-61d1577b.css">
-
-		<script type="module">
-			import { start } from "/_app/start-4609a0b3.js";
-			start({
-				target: document.querySelector("#svelte"),
-				paths: {"base":"","assets":""},
-				session: {},
-				host: location.host,
-				route: true,
-				spa: true,
-				trailing_slash: "never",
-				hydrate: null
-			});
-		</script>
+	%svelte.head%
 </head>
 
 <body>
-	<div id="svelte">
-
-	
-</div>
+	<div id="svelte">%svelte.body%</div>
 
 	<script src="/__/firebase/8.10.0/firebase-app.js"></script>
 	<script src="/__/firebase/init.js"></script>

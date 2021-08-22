@@ -1,5 +1,6 @@
 {
   "hosting": {
+    "site": "ecoroute",
     "public": "public",
     "ignore": [
       "firebase.json",
