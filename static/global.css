@@ -34,8 +34,9 @@ body {
 }
 
 /* Remove default link colour for icons */
-a > .material-icons {
+a.material-icons {
 	color: #ffffff;
+	text-decoration: none;
 }
 
 h1 {
