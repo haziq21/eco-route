@@ -17,7 +17,7 @@
 		const res = await fetch('/api/bus-arrivals');
 		const data = await res.json();
 
-		return JSON.stringify(data);
+		return data;
 	}
 </script>
 
@@ -27,7 +27,7 @@
 	{#await getBusArrivals()}
 		<p>loading...</p>
 	{:then response}
-		{console.log('showing res')}
-		<p>{response}</p>
+		{console.log(response)}
+		<p>{JSON.stringify(response.data)}</p>
 	{/await}
 </Box>
