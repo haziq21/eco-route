@@ -31,6 +31,7 @@ body {
 
 * {
 	box-sizing: inherit;
+	-webkit-tap-highlight-color: transparent;
 }
 
 /* Remove default link colour for icons */
