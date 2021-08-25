@@ -1,4 +1,11 @@
-import type { arrivals, bus, service } from '../../types/busArrivals.type';
+import type {
+	arrivals,
+	bus,
+	rawArrivals,
+	rawBus,
+	rawService,
+	service
+} from 'src/types/busArrivals.type';
 
 export async function get() {
 	// DataMall API URL
@@ -15,7 +22,7 @@ export async function get() {
 	// Convert HTTP response to JSON and resetructure JSON data
 	const data = formatArrivals(await res.json());
 
-	if (res) {
+	if (data) {
 		return {
 			body: {
 				data
@@ -24,19 +31,18 @@ export async function get() {
 	}
 }
 
-function formatArrivals(data): arrivals {
+function formatArrivals(data: rawArrivals): arrivals {
 	// Some bus numbers / codes have letters as well as numbers,
 	// so here we're sorting by number first then by letter.
-	function busNumberSort(bus1, bus2) {
+	function busNumberSort(bus1: service, bus2: service) {
 		// Extract numbers from bus code
-		const number1 = bus1.number.match(/\d+/g);
-		const number2 = bus2.number.match(/\d+/g);
+		const number1 = bus1.number.match(/\d+/g)[0];
+		const number2 = bus2.number.match(/\d+/g)[0];
 
 		// bus1 and bus2 don't have the same number
 		// (e.g. 7A and 7B have the same number)
 		if (number1 !== number2) {
-			// bus1 and bus2 are strings but are coerced into numbers
-			return number1 - number2;
+			return parseInt(number1) - parseInt(number2);
 		}
 
 		// Sort alphabetically
@@ -48,22 +54,30 @@ function formatArrivals(data): arrivals {
 		services: data.Services
 			// Reformat JSON data
 			.map((x) => formatService(x))
-			// Sort bus numbers
+			// Sort by bus number
 			.sort(busNumberSort)
 	};
 }
 
-function formatService(data): service {
+function formatService(data: rawService): service {
 	return {
 		number: data.ServiceNo,
-		arrivals: [formatBus(data.NextBus), formatBus(data.NextBus2), formatBus(data.NextBus3)]
+		arrivals: [formatBus(data.NextBus), formatBus(data.NextBus2), formatBus(data.NextBus3)].filter(
+			(x) => x !== null // Filter out unavailable data
+		)
 	};
 }
 
-function formatBus(data): bus {
+function formatBus(data: rawBus): bus {
+	// Data not available
+	if (!data.EstimatedArrival) {
+		return null;
+	}
 	return {
 		minutesToArrival: Math.floor(
-			Math.max(new Date(data.EstimatedArrival) - new Date(), 0) / 60000 // 60,000 miliseconds in a minute
-		)
+			Math.max(new Date(data.EstimatedArrival).getTime() - Date.now(), 0) / 60000 // 60,000 miliseconds in a minute
+		),
+		wheelchairAccessible: data.Feature == 'WAB',
+		type: data.Type
 	};
 }

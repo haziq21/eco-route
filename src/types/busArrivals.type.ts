@@ -1,15 +1,39 @@
-export type bus = {
+// Types for formatted JSON data
+
+export interface bus {
 	minutesToArrival: number;
 	// occupancy: number;
-	// wheelchairAccessible: boolean
-};
+	wheelchairAccessible: boolean;
+	type: 'SD' | 'DD' | 'BD';
+}
 
-export type service = {
-	number: number;
+export interface service {
+	number: string;
 	arrivals: bus[];
-};
+}
 
-export type arrivals = {
+export interface arrivals {
 	busStopCode: string;
 	services: service[];
-};
+}
+
+// Types for unformatted (raw) JSON data
+
+export interface rawBus {
+	EstimatedArrival: string;
+	Load: 'SEA' | 'SDA' | 'LSD';
+	Feature: 'WAB' | '';
+	Type: 'SD' | 'DD' | 'BD';
+}
+
+export interface rawService {
+	ServiceNo: string;
+	NextBus: rawBus;
+	NextBus2: rawBus;
+	NextBus3: rawBus;
+}
+
+export interface rawArrivals {
+	BusStopCode: string;
+	Services: rawService[];
+}
