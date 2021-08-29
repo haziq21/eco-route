@@ -1,24 +1,21 @@
+<script context="module" lang="ts">
+	// Value of destination location searchbar
+	export const destinationQuery = writable('school');
+	export const originQuery = writable('Current location');
+</script>
+
 <script>
 	import EmphasisedBox from '$lib/EmphasisedBox.svelte';
 	import Searchbar from '$lib/Searchbar.svelte';
 	import { page } from '$app/stores';
 	import { fade, slide } from 'svelte/transition';
-	import { goto } from '$app/navigation';
-
-	let destinationSearchbar;
-
-	function searchbarRedirect() {
-		if ($page.path !== '/select-location') {
-			goto('/select-location');
-			setTimeout(() => destinationSearchbar.focus(), 150);
-		}
-	}
+	import { writable } from 'svelte/store';
 </script>
 
 <EmphasisedBox>
 	<!-- "Go somewhere" homepage header -->
 	{#if $page.path === '/'}
-		<span class="searchbar-layout" transition:slide>
+		<span class="header-layout" transition:slide>
 			<h1 transition:fade>Go somewhere</h1>
 		</span>
 	{/if}
@@ -33,15 +30,17 @@
 
 		<div class="searchbar-layout">
 			<!-- Origin searchbar -->
-			{#if $page.path === '/suggested-routes'}
-				<Searchbar placeholder="Enter your origin" defaultText="Current location" />
+			{#if $page.path === '/suggested-routes' || $page.params.endpoint == 'origin'}
+				<Searchbar placeholder="Enter your origin" bind:text={$originQuery} name="origin" />
 			{/if}
 			<!-- Destination searchbar -->
-			<Searchbar
-				placeholder="Enter your destination"
-				bind:ref={destinationSearchbar}
-				on:click={searchbarRedirect}
-			/>
+			{#if $page.params.endpoint !== 'origin'}
+				<Searchbar
+					placeholder="Enter your destination"
+					bind:text={$destinationQuery}
+					name="destination"
+				/>
+			{/if}
 		</div>
 	</div>
 </EmphasisedBox>
@@ -51,8 +50,8 @@
 <style>
 	.searchbar-layout {
 		width: 100%;
-		display: flex;
-		flex-direction: column;
+		display: grid;
+		gap: var(--space-sm);
 	}
 
 	.header-layout {
