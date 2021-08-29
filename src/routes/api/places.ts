@@ -1,4 +1,4 @@
-import type { place, rawPlace } from 'src/types/places.type';
+import type { place, rawPlace, rawPlacesRoot } from 'src/types/places.type';
 
 export async function get({ query }) {
 	// API url and query paramaters
@@ -11,7 +11,7 @@ export async function get({ query }) {
 	].join('&');
 
 	const res = await fetch(`${url}?${queryParams}`);
-	const data = await res.json();
+	const data: rawPlacesRoot = await res.json();
 
 	if (data.features) {
 		return {
@@ -30,6 +30,9 @@ export async function get({ query }) {
 
 function formatPlace(data: rawPlace): place {
 	return {
-		name: data.text
+		name: data.text,
+		address: data.properties.address,
+		longitude: data.center[0],
+		latitude: data.center[1]
 	};
 }
