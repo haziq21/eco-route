@@ -3,6 +3,7 @@
 	import BusArrivals from '$lib/BusArrivals.svelte';
 	import Searchbar from '$lib/Searchbar.svelte';
 	import { onMount } from 'svelte';
+	import { destinationQuery, originQuery } from './__layout.svelte';
 
 	onMount(async () => {
 		try {
@@ -14,10 +15,15 @@
 	});
 
 	async function getBusArrivals() {
-		const res = await fetch('/api/bus-arrivals');
-		const data = await res.json();
-
-		return data;
+		try {
+			const res = await fetch('/api/bus-arrivals');
+			const data = await res.json();
+			console.log(data);
+			return data;
+		} catch (e) {
+			console.error(e);
+			return e;
+		}
 	}
 
 	async function getBusStops() {
@@ -27,22 +33,22 @@
 		return data;
 	}
 
-	// console.log(getBusStops());
-
-	// console.log(`data returned to index.svelte: ${getBusStops()}`);
+	$destinationQuery = '';
+	$originQuery = 'Current location';
 </script>
 
 <Box>
-	{#await getBusStops() then response}
-		<!-- {JSON.stringify(response.data)} -->
-	{/await}
+	<!-- {#await getBusStops() then response}
+		{JSON.stringify(response.data)}
+	{/await} -->
 	<h1>Bus arrivals</h1>
 	<Searchbar placeholder="Search for a bus number or stop" />
 	{#await getBusArrivals()}
 		<p>loading...</p>
 	{:then response}
-		<BusArrivals arrivals={response.data} />
-	{:catch}
-		<p>error...</p>
+		<p>{JSON.stringify(response)}</p>
+		<!-- <BusArrivals arrivals={response.data} /> -->
+	{:catch error}
+		<p>error: {error.message}</p>
 	{/await}
 </Box>
