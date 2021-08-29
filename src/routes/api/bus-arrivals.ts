@@ -19,7 +19,7 @@ export async function get() {
 		}
 	});
 
-	// Convert HTTP response to JSON and resetructure JSON data
+	// Convert HTTP response to JSON and restructure JSON data
 	const data = formatArrivals(await res.json());
 
 	if (data) {
