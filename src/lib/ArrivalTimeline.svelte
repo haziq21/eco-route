@@ -6,31 +6,26 @@
 </script>
 
 <div class="bus-service">
-	<!-- Horizontal timeline line -->
-	<div class="line" />
-
-	{#each arrivals as arrival}
-		{#if arrival.minutesToArrival < 25}
-			<ArrivalMarker {arrival} />
+	{#each arrivals as arrival (arrival)}
+		<ArrivalMarker {arrival} />
+		{#if arrival !== arrivals[arrivals.length - 1]}
+			<span class="separator">&lt;</span>
 		{/if}
 	{/each}
 </div>
 
 <style>
 	.bus-service {
-		position: relative;
-		/* display: flex;
+		/* background-color: blue; */
+		width: fit-content;
+		display: flex;
 		flex-direction: row;
-		align-items: flex-end; */
+		align-items: center;
+		justify-content: flex-start;
+		/* margin-right: auto; */
 	}
 
-	.line {
-		position: absolute;
-		bottom: 0;
-		width: 100%;
-		height: 3px;
-		margin: 0;
-		border-radius: 1.5px;
-		background-color: var(--background);
+	.separator {
+		padding: 0 var(--space);
 	}
 </style>
