@@ -62,7 +62,7 @@ function formatArrivals(data: rawArrivals): arrivals {
 function formatService(data: rawService): service {
 	return {
 		number: data.ServiceNo,
-		arrivals: [formatBus(data.NextBus), formatBus(data.NextBus2), formatBus(data.NextBus3)].filter(
+		arrivals: [formatBus(data.NextBus), formatBus(data.NextBus2)].filter(
 			(x) => x !== null // Filter out unavailable data
 		)
 	};
