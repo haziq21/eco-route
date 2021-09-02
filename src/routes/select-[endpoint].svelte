@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { page } from '$app/stores';
 	import Box from '$lib/Box.svelte';
-	import { destinationQuery, originQuery } from './__layout.svelte';
+	import { currentPlace, destinationQuery, originQuery } from './stores.js';
 
 	async function getPlaces(search: string) {
 		const res = await fetch('/api/places?search=' + search);
@@ -10,33 +10,27 @@
 		return data;
 	}
 
-	// if (navigator.geolocation) {
-	// 	navigator.geolocation.getCurrentPosition((position) => {
-	// 		console.log(`${position.coords.longitude}, ${position.coords.latitude}`);
-	// 	});
-	// }
-
 	let searchResults = [];
 
 	// Select the active query
 	const locationQuery = $page.params.endpoint === 'destination' ? destinationQuery : originQuery;
-	$: getPlaces($locationQuery).then((result) => (searchResults = result.data));
+	$: getPlaces($locationQuery.name).then((result) => (searchResults = result.data));
 </script>
 
 <Box>
-	{#if !$locationQuery}
-		<a href="/suggested-routes" on:click={() => ($locationQuery = 'Current location')}>
+	{#if !$locationQuery.name}
+		<a href="/suggested-routes" on:click={() => ($locationQuery = $currentPlace)}>
 			Current location<br />
 		</a>
 	{/if}
 	{#each searchResults as location}
-		<a href="/suggested-routes" on:click={() => ($locationQuery = location.name)}>
+		<a href="/suggested-routes" on:click={() => ($locationQuery = location)}>
 			{location.name}
 		</a>
 		<br />
 	{:else}
-		{#if $locationQuery}
-			"{$locationQuery}" not found
+		{#if $locationQuery.name}
+			"{$locationQuery.name}" not found
 		{/if}
 	{/each}
 </Box>

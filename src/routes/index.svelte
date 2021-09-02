@@ -1,9 +1,9 @@
-<script>
+<script lang="ts">
 	import Box from '$lib/Box.svelte';
 	import BusArrivals from '$lib/BusArrivals.svelte';
 	import Searchbar from '$lib/Searchbar.svelte';
 	import { onMount } from 'svelte';
-	import { destinationQuery, originQuery } from './__layout.svelte';
+	import { currentPlace, destinationQuery, originQuery } from './stores.js';
 
 	onMount(async () => {
 		try {
@@ -15,15 +15,9 @@
 	});
 
 	async function getBusArrivals() {
-		try {
-			const res = await fetch('/api/bus-arrivals');
-			const data = await res.json();
-			console.log(data);
-			return data;
-		} catch (e) {
-			console.error(e);
-			return e;
-		}
+		const res = await fetch('/api/bus-arrivals');
+		const data = await res.json();
+		return data;
 	}
 
 	async function getBusStops() {
@@ -33,8 +27,13 @@
 		return data;
 	}
 
-	$destinationQuery = '';
-	$originQuery = 'Current location';
+	$destinationQuery = {
+		name: '',
+		address: '',
+		longitude: null,
+		latitude: null
+	};
+	$originQuery = $currentPlace;
 </script>
 
 <Box>
@@ -46,8 +45,8 @@
 	{#await getBusArrivals()}
 		<p>loading...</p>
 	{:then response}
-		<p>{JSON.stringify(response)}</p>
-		<!-- <BusArrivals arrivals={response.data} /> -->
+		<!-- <p>{JSON.stringify(response)}</p> -->
+		<BusArrivals arrivals={response.data} />
 	{:catch error}
 		<p>error: {error.message}</p>
 	{/await}
