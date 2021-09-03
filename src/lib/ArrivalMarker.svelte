@@ -11,7 +11,6 @@
 	<span class="time-unit">min</span>
 	<span class="icons">
 		<span>{arrival.type}</span>
-		<!-- <span>hello</span> -->
 	</span>
 </span>
 
@@ -28,6 +27,8 @@
 
 	.number {
 		grid-area: number;
+		font-weight: bolder;
+		font-size: 1.17em;
 	}
 
 	.time-unit {
