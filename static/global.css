@@ -14,7 +14,7 @@
 	--space: 14px;
 	--space-sm: 5px;
 
-	/* Others */
+	/* Border radius */
 	--border-radius: 10px;
 	--border-radius-sm: 5px;
 }
@@ -41,6 +41,10 @@ body::-webkit-scrollbar {
 * {
 	box-sizing: inherit;
 	-webkit-tap-highlight-color: transparent;
+}
+
+:not(input) {
+	user-select: none;
 }
 
 /* Remove default link colour for icons */
