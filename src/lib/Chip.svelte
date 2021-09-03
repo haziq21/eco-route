@@ -20,6 +20,7 @@
 		margin-right: var(--space);
 		background-color: var(--icon-text);
 		border-radius: var(--border-radius-sm);
+		box-shadow: var(--shadow);
 		display: flex;
 		flex-direction: row;
 		align-items: center;
