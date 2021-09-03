@@ -25,3 +25,5 @@ export const destinationQuery = writable({});
 
 // Value of origin location searchbar
 export const originQuery = writable({});
+
+export const routes = writable([]);

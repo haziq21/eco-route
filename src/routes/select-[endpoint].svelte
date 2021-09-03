@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { page } from '$app/stores';
 	import Box from '$lib/Box.svelte';
-	import { currentPlace, destinationQuery, originQuery } from './stores.js';
+	import { currentPlace, destinationQuery, originQuery, routes } from './stores.js';
 
 	async function getPlaces(search: string) {
 		const res = await fetch('/api/places?search=' + search);
@@ -11,6 +11,9 @@
 	}
 
 	let searchResults = [];
+
+	// Clear the routes store
+	$routes = [];
 
 	// Select the active query
 	const locationQuery = $page.params.endpoint === 'destination' ? destinationQuery : originQuery;
