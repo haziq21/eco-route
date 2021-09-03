@@ -1,6 +1,7 @@
 <script lang="ts">
 	import EmphasisedBox from '$lib/EmphasisedBox.svelte';
 	import Searchbar from '$lib/Searchbar.svelte';
+	import Chip from '$lib/Chip.svelte';
 	import { page } from '$app/stores';
 	import { fade, slide } from 'svelte/transition';
 	import { destinationQuery, originQuery } from './stores.js';
@@ -15,18 +16,24 @@
 	{/if}
 
 	<div class="header-layout">
-		<!-- Back button -->
-		<div class="back-button-layout">
-			<!-- Hide back button on homepage -->
-			{#if $page.path !== '/'}
+		<!-- Hide back button on homepage -->
+		{#if $page.path !== '/'}
+			<!-- Back button -->
+			<div class="back-button-layout">
 				<a
 					href={$page.path !== '/route-details' ? '/' : '/suggested-routes'}
 					class="material-icons"
 				>
 					arrow_back_ios
 				</a>
-			{/if}
-		</div>
+			</div>
+		{/if}
+
+		<!-- Destination chips -->
+		{#if $page.path === '/'}
+			<Chip icon="home">Home</Chip>
+			<Chip icon="work">Work</Chip>
+		{/if}
 
 		<!-- Don't show searchbars on route details page -->
 		{#if $page.path !== '/route-details'}
@@ -35,10 +42,11 @@
 				{#if $page.path === '/suggested-routes' || $page.params.endpoint == 'origin'}
 					<Searchbar placeholder="Enter your origin" bind:text={$originQuery.name} name="origin" />
 				{/if}
+
 				<!-- Destination searchbar -->
 				{#if $page.params.endpoint !== 'origin'}
 					<Searchbar
-						placeholder="Enter your destination"
+						placeholder={$page.path === '/' ? 'Search location' : 'Enter your destination'}
 						bind:text={$destinationQuery.name}
 						name="destination"
 					/>
