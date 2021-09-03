@@ -1,5 +1,6 @@
+import type { rawLeg, rawRoute, route, segment } from 'src/types/directions.type';
+
 async function getOneMapToken() {
-	console.log('getting OM token');
 	// Token retrieval API URL
 	const url = 'https://developers.onemap.sg/privateapi/auth/post/getToken';
 
@@ -19,7 +20,6 @@ async function getOneMapToken() {
 	});
 
 	const data = await res.json();
-	console.log('token got');
 
 	return data.access_token;
 }
@@ -42,19 +42,34 @@ export async function get({ query }) {
 		`token=${await getOneMapToken()}`
 	].join('&');
 
-	console.log(`${url}?${queryParams}`);
 	const res = await fetch(`${url}?${queryParams}`);
-	console.log('res got');
-	// console.log(await res.clone().text());
-	// console.log('res cloned');
-	const data = await res.json();
-	console.log('data got');
+	const data = (await res.json()).plan.itineraries;
 
 	// if (data) {
 	return {
-		body: {
-			data
-		}
+		body: data.map(formatRoute)
 	};
 	// }
+}
+
+function formatRoute(data: rawRoute): route {
+	const segments = data.legs.map(formatSegment);
+	return {
+		distance: segments.reduce((a, b) => a + b.distance, 0),
+		duration: data.duration,
+		segments
+	};
+}
+
+function formatSegment(data: rawLeg): segment {
+	return {
+		distance: data.distance,
+		duration: (data.endTime - data.startTime) / 1000,
+		mode: {
+			WALK: 'walk',
+			BUS: 'bus',
+			SUBWAY: 'mrt'
+		}[data.mode],
+		modeIdentity: data.route
+	};
 }
