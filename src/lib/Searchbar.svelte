@@ -20,13 +20,14 @@
 <input type="text" {placeholder} bind:value={text} bind:this={ref} on:click={redirect} />
 
 <style>
-	input[type='text'] {
+	input {
 		-webkit-appearance: none;
 		-moz-appearance: none;
 		appearance: none;
 
 		width: 100%;
-		padding: 9px;
+		height: 38px;
+		padding-left: var(--space-md);
 		margin: 0;
 		background-color: var(--input-field);
 		color: var(--icon-text);
@@ -34,6 +35,11 @@
 		font-size: 1em;
 		border: none;
 		border-radius: var(--border-radius-sm);
+		transition: 0.3s;
+	}
+
+	input:focus {
+		outline: none;
 		box-shadow: var(--shadow);
 	}
 </style>
