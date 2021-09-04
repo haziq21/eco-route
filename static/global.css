@@ -12,6 +12,7 @@
 
 	/* Spacing */
 	--space: 14px;
+	--space-md: 9px;
 	--space-sm: 5px;
 
 	/* Border radius */
@@ -49,7 +50,6 @@ body::-webkit-scrollbar {
 
 /* Remove default link colour for icons */
 a.material-icons {
-	color: #ffffff;
 	text-decoration: none;
 }
 
