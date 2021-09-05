@@ -3,7 +3,7 @@
 	import BusArrivals from '$lib/BusArrivals.svelte';
 	import Searchbar from '$lib/Searchbar.svelte';
 	import { onMount } from 'svelte';
-	import { currentPlace, destinationQuery, originQuery } from './stores.js';
+	import { currentPlace, destinationQuery, originQuery } from './_stores';
 
 	onMount(async () => {
 		try {
@@ -33,13 +33,10 @@
 		longitude: null,
 		latitude: null
 	};
-	$originQuery = $currentPlace;
+	$: $originQuery = $currentPlace;
 </script>
 
 <Box>
-	<!-- {#await getBusStops() then response}
-		{JSON.stringify(response.data)}
-	{/await} -->
 	<h1>Bus arrivals</h1>
 	<Searchbar placeholder="Search for a bus number or stop" />
 	{#await getBusArrivals()}
