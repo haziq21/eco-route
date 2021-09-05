@@ -54,8 +54,8 @@ body::-webkit-scrollbar {
 	user-select: none;
 }
 
-/* Remove default link colour for icons */
-a.material-icons {
+/* Remove default link underline */
+a {
 	text-decoration: none;
 }
 
