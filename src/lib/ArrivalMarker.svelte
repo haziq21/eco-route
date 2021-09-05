@@ -11,6 +11,7 @@
 	<span class="time-unit">min</span>
 	<span class="icons">
 		<span>{arrival.type}</span>
+		<span>{arrival.wheelchairAccessible}</span>
 	</span>
 </span>
 
