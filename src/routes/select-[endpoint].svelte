@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { page } from '$app/stores';
 	import Box from '$lib/Box.svelte';
-	import { currentPlace, destinationQuery, originQuery, routes } from './stores.js';
+	import { currentPlace, destinationQuery, originQuery, routes } from './_stores';
 
 	async function getPlaces(search: string) {
 		const res = await fetch('/api/places?search=' + search);
@@ -17,15 +17,19 @@
 
 	// Select the active query
 	const locationQuery = $page.params.endpoint === 'destination' ? destinationQuery : originQuery;
+	const oppositeQuery = $page.params.endpoint === 'destination' ? originQuery : destinationQuery;
 	$: getPlaces($locationQuery.name).then((result) => (searchResults = result.data));
+
+	$: if (
+		$oppositeQuery.name !== 'Current location' &&
+		!$locationQuery.name &&
+		(!searchResults.length || searchResults[0].name !== 'Current location')
+	) {
+		searchResults = [$currentPlace, ...searchResults];
+	}
 </script>
 
 <Box>
-	{#if !$locationQuery.name}
-		<a href="/suggested-routes" on:click={() => ($locationQuery = $currentPlace)}>
-			Current location<br />
-		</a>
-	{/if}
 	{#each searchResults as location}
 		<a href="/suggested-routes" on:click={() => ($locationQuery = location)}>
 			{location.name}
@@ -34,6 +38,8 @@
 	{:else}
 		{#if $locationQuery.name}
 			"{$locationQuery.name}" not found
+		{:else}
+			type a location to search
 		{/if}
 	{/each}
 </Box>
