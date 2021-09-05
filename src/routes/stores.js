@@ -26,4 +26,6 @@ export const destinationQuery = writable({});
 // Value of origin location searchbar
 export const originQuery = writable({});
 
+// Routes calculated on suggested-routes page
 export const routes = writable([]);
+export const selectedRoute = writable({});
