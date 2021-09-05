@@ -47,9 +47,33 @@ export async function get({ query }) {
 
 	// if (data) {
 	return {
-		body: data.map(formatRoute)
+		body: data.map(formatRoute).map(sanitiseRoute)
 	};
 	// }
+}
+
+function sanitiseRoute(data: route): route {
+	data.segments = data.segments.reduce((currentRoute, segment) => {
+		if (!currentRoute.length) {
+			return [segment];
+		}
+
+		if (currentRoute[currentRoute.length - 1].mode === 'walk' && segment.mode === 'walk') {
+			currentRoute[currentRoute.length - 1].distance += segment.distance;
+			currentRoute[currentRoute.length - 1].duration += segment.duration;
+			currentRoute[currentRoute.length - 1].endLocation = segment.endLocation;
+
+			return currentRoute;
+		}
+
+		if (segment.startLocation === segment.endLocation) {
+			return currentRoute;
+		}
+
+		return currentRoute.concat(segment);
+	}, []);
+
+	return data;
 }
 
 function formatRoute(data: rawRoute): route {
@@ -57,6 +81,9 @@ function formatRoute(data: rawRoute): route {
 	return {
 		distance: segments.reduce((a, b) => a + b.distance, 0),
 		duration: data.duration,
+		walkTime: data.walkTime,
+		leaveTime: data.startTime,
+		arriveTime: data.endTime,
 		segments
 	};
 }
@@ -70,6 +97,9 @@ function formatSegment(data: rawLeg): segment {
 			BUS: 'bus',
 			SUBWAY: 'mrt'
 		}[data.mode],
-		modeIdentity: data.route
+		modeIdentity: data.route,
+		startLocation: data.from.name,
+		endLocation: data.to.name,
+		intermediateStops: data.numIntermediateStops
 	};
 }
