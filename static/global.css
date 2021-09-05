@@ -18,6 +18,12 @@
 	/* Border radius */
 	--border-radius: 10px;
 	--border-radius-sm: 5px;
+
+	/* MRT line colours */
+	--MRT-EW: rgb(0, 147, 58);
+	--MRT-NS: rgb(235, 60, 16);
+	--MRT-CC: rgb(230, 219, 60);
+	--MRT-DT: rgb(0, 85, 183);
 }
 
 body {
