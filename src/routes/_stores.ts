@@ -1,7 +1,10 @@
+import type { route } from 'src/types/directions.type';
+import type { place } from 'src/types/places.type';
 import { readable, writable } from 'svelte/store';
+import type { Writable, Readable } from 'svelte/store';
 
 // Readable store for current location of user
-export const currentPlace = readable({}, (set) => {
+export const currentPlace: Readable<place> = readable({}, (set) => {
 	// Update currentPlace when coordinates changed
 	if (navigator.geolocation) {
 		const id = navigator.geolocation.watchPosition((position) => {
@@ -21,11 +24,11 @@ export const currentPlace = readable({}, (set) => {
 });
 
 // Value of destination location searchbar
-export const destinationQuery = writable({});
+export const destinationQuery: Writable<place> = writable({});
 
 // Value of origin location searchbar
-export const originQuery = writable({});
+export const originQuery: Writable<place> = writable({});
 
 // Routes calculated on suggested-routes page
-export const routes = writable([]);
-export const selectedRoute = writable({});
+export const routes: Writable<route[]> = writable([]);
+export const selectedRoute: Writable<route> = writable({});

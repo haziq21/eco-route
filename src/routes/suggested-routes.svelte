@@ -3,7 +3,7 @@
 	import RouteTimeline from '$lib/RouteTimeline.svelte';
 	import type { route } from 'src/types/directions.type.js';
 	import type { place } from 'src/types/places.type';
-	import { destinationQuery, originQuery, routes } from './stores.js';
+	import { destinationQuery, originQuery, routes } from './_stores';
 
 	function hours(seconds: number) {
 		return Math.floor(seconds / 3600);
@@ -78,7 +78,6 @@
 
 <style>
 	.extra {
-		/* font-weight: lighter; */
 		font-size: 0.8em;
 		grid-column: 1 / 3;
 		margin: 3px 0 var(--space) 0;
