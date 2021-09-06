@@ -2,7 +2,7 @@
 
 export interface bus {
 	minutesToArrival: number;
-	// occupancy: number;
+	occupancy: 'SEA' | 'SDA' | 'LSD';
 	wheelchairAccessible: boolean;
 	type: 'SD' | 'DD' | 'BD';
 }

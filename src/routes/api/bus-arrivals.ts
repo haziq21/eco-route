@@ -77,6 +77,7 @@ function formatBus(data: rawBus): bus {
 		minutesToArrival: Math.floor(
 			Math.max(new Date(data.EstimatedArrival).getTime() - Date.now(), 0) / 60000 // 60,000 miliseconds in a minute
 		),
+		occupancy: data.Load,
 		wheelchairAccessible: data.Feature == 'WAB',
 		type: data.Type
 	};
