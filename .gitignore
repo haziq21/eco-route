@@ -4,3 +4,4 @@ node_modules
 /package
 /public
 .firebase
+src/routes/api/_config.js

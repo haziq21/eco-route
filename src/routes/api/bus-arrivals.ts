@@ -6,6 +6,7 @@ import type {
 	rawService,
 	service
 } from 'src/types/busArrivals.type';
+import { config } from './_config.js';
 
 export async function get() {
 	// DataMall API URL
@@ -15,7 +16,7 @@ export async function get() {
 	// Send HTTP request
 	const res = await fetch(dataMallUrl + stopCodeParam, {
 		headers: {
-			AccountKey: 'cmWAPZxsRe+1Dahcw+wBVQ=='
+			AccountKey: config.DATAMALL_KEY
 		}
 	});
 
