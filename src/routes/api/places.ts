@@ -1,38 +1,37 @@
 import type { place, rawPlace, rawPlacesRoot } from 'src/types/places.type';
 
 export async function get({ query }) {
+	if (!query.get('search')) {
+		return { body: [] };
+	}
 	// API url and query paramaters
-	const url = `https://api.mapbox.com/geocoding/v5/mapbox.places/${query.get('search')}.json`;
-	const queryParams = [
-		'bbox=103.59089944746998,1.165741552160555,104.10183924084397,1.4802985418613261',
-		'limit=10',
-		'type=address,poi',
-		'access_token=pk.eyJ1IjoiaGF6aXEyMSIsImEiOiJja3NjcmxmZ2UwanB4Mnhtc2g5d3JpZmdwIn0.o-SLT-6325-0rbZs7efFrg'
-	].join('&');
+	const url = `https://developers.onemap.sg/commonapi/search`;
+	const queryParams = [`searchVal=${query.get('search')}`, 'getAddrDetails=Y', 'returnGeom=Y'].join(
+		'&'
+	);
 
 	const res = await fetch(`${url}?${queryParams}`);
 	const data: rawPlacesRoot = await res.json();
 
-	if (data.features) {
-		return {
-			body: {
-				data: data.features.map((x) => formatPlace(x))
-			}
-		};
-	} else {
-		return {
-			body: {
-				data: []
-			}
-		};
-	}
+	return {
+		body: uniq(data.results.map(formatPlace))
+	};
 }
 
 function formatPlace(data: rawPlace): place {
 	return {
-		name: data.text,
-		address: data.properties.address,
-		longitude: data.center[0],
-		latitude: data.center[1]
+		name: data.SEARCHVAL,
+		address: data.BLK_NO + ' ' + data.ROAD_NAME,
+		longitude: parseFloat(data.LONGITUDE),
+		latitude: parseFloat(data.LATITUDE)
 	};
+}
+
+function uniq(places: place[]): place[] {
+	const seen = {};
+	return places.filter(({ name }) => {
+		const hasSeen = seen.hasOwnProperty(name);
+		if (!hasSeen) seen[name] = true;
+		return !hasSeen;
+	});
 }

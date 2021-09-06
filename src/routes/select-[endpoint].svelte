@@ -18,7 +18,7 @@
 	// Select the active query
 	const locationQuery = $page.params.endpoint === 'destination' ? destinationQuery : originQuery;
 	const oppositeQuery = $page.params.endpoint === 'destination' ? originQuery : destinationQuery;
-	$: getPlaces($locationQuery.name).then((result) => (searchResults = result.data));
+	$: getPlaces($locationQuery.name).then((result) => (searchResults = result));
 
 	$: if (
 		$oppositeQuery.name !== 'Current location' &&

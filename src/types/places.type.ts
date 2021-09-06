@@ -6,13 +6,13 @@ export interface place {
 }
 
 export interface rawPlacesRoot {
-	features: rawPlace[];
+	results: rawPlace[];
 }
 
 export interface rawPlace {
-	text: string;
-	properties: {
-		address: string;
-	};
-	center: [number, number];
+	SEARCHVAL: string;
+	BLK_NO: string;
+	ROAD_NAME: string;
+	LATITUDE: string;
+	LONGITUDE: string;
 }
