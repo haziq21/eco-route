@@ -1,7 +1,6 @@
 <script lang="ts">
 	import type { arrivals } from 'src/types/busArrivals.type';
 	import ArrivalMarker from './ArrivalMarker.svelte';
-	import ArrivalTimeline from './ArrivalTimeline.svelte';
 
 	export let arrivals: arrivals;
 </script>
@@ -15,14 +14,24 @@
 		<span class="spacing" />
 
 		<!-- Arrival timings -->
-		{#each service.arrivals as arrival}
+		{#if service.arrivals[0]}
+			<ArrivalMarker arrival={service.arrivals[0]} />
+			<span class="separator">&#10148;</span>
+			{#if service.arrivals[1]}
+				<ArrivalMarker arrival={service.arrivals[1]} />
+			{:else}
+				NA
+			{/if}
+		{:else}
+			<span class="error-message">No arrivals available</span>
+		{/if}
+		<!-- {#each service.arrivals as arrival}
 			<ArrivalMarker {arrival} />
 
-			<!-- Timing separator -->
 			{#if arrival !== service.arrivals[service.arrivals.length - 1]}
 				<span class="separator">&lt;</span>
 			{/if}
-		{/each}
+		{/each} -->
 	{/each}
 </div>
 
@@ -39,7 +48,14 @@
 	}
 
 	.separator {
-		margin: 0 var(--space);
+		margin: 0 28px;
+		font-size: 1.5em;
+		transform: scale(-1, 1);
+		color: var(--icon-text);
+	}
+
+	.error-message {
+		grid-column: 3 / 6;
 	}
 
 	.spacing {
@@ -48,7 +64,7 @@
 
 	.bus-stop {
 		display: grid;
-		grid-template-columns: [front] min-content auto [spacing] repeat(5, min-content);
+		grid-template-columns: [front] min-content auto [spacing] repeat(3, min-content);
 		row-gap: var(--space);
 		justify-items: center;
 		align-items: center;
