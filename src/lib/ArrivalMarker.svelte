@@ -10,8 +10,8 @@
 	</span>
 	<span class="time-unit">min</span>
 	<span class="icons">
+		<span>{arrival.occupancy}</span>
 		<span>{arrival.type}</span>
-		<span>{arrival.wheelchairAccessible}</span>
 	</span>
 </span>
 
@@ -23,17 +23,21 @@
 		grid-template-rows: auto;
 		grid-template-areas: 'number icons' 'time-unit icons';
 		justify-items: center;
+
 		gap: 0 var(--space-sm);
 	}
 
 	.number {
 		grid-area: number;
 		font-weight: bolder;
-		font-size: 1.17em;
+		font-size: 1.2em;
+		margin-bottom: -4px;
 	}
 
 	.time-unit {
 		grid-area: time-unit;
+		font-size: 0.9em;
+		/* font-weight: lighter; */
 	}
 
 	/* .marker {
