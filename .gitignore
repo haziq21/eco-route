@@ -5,3 +5,4 @@ node_modules
 /public
 .firebase
 src/routes/api/_config.js
+.vercel
