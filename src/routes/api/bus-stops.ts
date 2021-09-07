@@ -1,5 +1,4 @@
 import type { busStop, rawBusStop } from 'src/types/busStops.type';
-import { config } from './_config.js';
 
 export async function get() {
 	const data = (await fetchData()).map((x) => formatBusStop(x));
@@ -21,7 +20,7 @@ async function fetchData(iteration = 0) {
 	// HTTP request
 	const res = await fetch(url + skipParam, {
 		headers: {
-			AccountKey: config.DATAMALL_KEY
+			AccountKey: process.env.DATAMALL_KEY
 		}
 	});
 	let data: rawBusStop[] = (await res.json()).value;

@@ -1,5 +1,4 @@
 import type { rawLeg, rawRoute, route, segment } from 'src/types/directions.type';
-import { config } from './_config.js';
 
 async function getOneMapToken() {
 	// Token retrieval API URL
@@ -11,7 +10,10 @@ async function getOneMapToken() {
 		headers: {
 			'content-type': 'application/json'
 		},
-		body: config.ONEMAP_CREDENTIALS
+		body: JSON.stringify({
+			email: process.env.ONEMAP_EMAIL,
+			password: process.env.ONEMAP_PASSWORD
+		})
 	});
 
 	const data = await res.json();

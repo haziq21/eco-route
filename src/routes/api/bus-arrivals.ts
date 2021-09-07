@@ -6,17 +6,17 @@ import type {
 	rawService,
 	service
 } from 'src/types/busArrivals.type';
-import { config } from './_config.js';
 
 export async function get() {
 	// DataMall API URL
 	const dataMallUrl = 'http://datamall2.mytransport.sg/ltaodataservice/BusArrivalv2';
 	const stopCodeParam = '?BusStopCode=19049';
+	console.log(`DATAMALL_KEY: ${process.env.DATAMALL_KEY}`);
 
 	// Send HTTP request
 	const res = await fetch(dataMallUrl + stopCodeParam, {
 		headers: {
-			AccountKey: config.DATAMALL_KEY
+			AccountKey: process.env.DATAMALL_KEY
 		}
 	});
 
