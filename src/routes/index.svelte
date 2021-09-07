@@ -50,7 +50,7 @@
 			<p>loading...</p>
 		{:then response}
 			<!-- <p>{JSON.stringify(response)}</p> -->
-			<BusArrivals arrivals={response.data} />
+			<BusArrivals arrivals={response} />
 		{:catch error}
 			<p>error: {error.message}</p>
 		{/await}

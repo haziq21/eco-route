@@ -23,13 +23,9 @@ export async function get() {
 	// Convert HTTP response to JSON and restructure JSON data
 	const data = formatArrivals(await res.json());
 
-	if (data) {
-		return {
-			body: {
-				data
-			}
-		};
-	}
+	return {
+		body: data
+	};
 }
 
 function formatArrivals(data: rawArrivals): arrivals {
