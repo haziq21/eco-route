@@ -10,8 +10,11 @@
 	</span>
 	<span class="time-unit">min</span>
 	<span class="icons">
-		<span>{arrival.occupancy}</span>
-		<span>{arrival.type}</span>
+		<span class="material-icons">
+			{{ SEA: 'person', SDA: 'group', LSD: 'groups' }[arrival.occupancy]}
+		</span>
+		<!-- <span>{arrival.type}</span> -->
+		<span class="material-icons"> directions_bus </span>
 	</span>
 </span>
 
@@ -20,7 +23,7 @@
 		/* background-color: aqua; */
 		display: grid;
 		grid-template-columns: min-content min-content;
-		grid-template-rows: auto;
+		/* grid-template-rows: min-content min-content; */
 		grid-template-areas: 'number icons' 'time-unit icons';
 		justify-items: center;
 
@@ -28,34 +31,24 @@
 	}
 
 	.number {
+		display: flex;
+		align-items: flex-end;
 		grid-area: number;
 		font-weight: bolder;
-		font-size: 1.2em;
-		margin-bottom: -4px;
+		font-size: 1.3em;
 	}
 
 	.time-unit {
 		grid-area: time-unit;
 		font-size: 0.9em;
-		/* font-weight: lighter; */
 	}
-
-	/* .marker {
-		width: 10px;
-		height: 10px;
-		background-color: var(--overlay);
-		border-radius: 100%;
-		border-style: solid;
-		border-width: 3px;
-		border-color: var(--background);
-		grid-area: marker;
-	} */
 
 	.icons {
 		display: flex;
 		flex-direction: column;
 		justify-content: center;
-		grid-area: icons;
 		vertical-align: center;
+		grid-area: icons;
+		/* color: var(--icon-text); */
 	}
 </style>
