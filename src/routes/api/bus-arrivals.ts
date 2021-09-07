@@ -11,7 +11,6 @@ export async function get() {
 	// DataMall API URL
 	const dataMallUrl = 'http://datamall2.mytransport.sg/ltaodataservice/BusArrivalv2';
 	const stopCodeParam = '?BusStopCode=19049';
-	console.log(`DATAMALL_KEY: ${process.env.DATAMALL_KEY}`);
 
 	// Send HTTP request
 	const res = await fetch(dataMallUrl + stopCodeParam, {
