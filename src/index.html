@@ -9,6 +9,10 @@
 	<link rel="manifest" href="manifest.json">
 	<link rel="stylesheet" href="/global.css">
 	<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons|Material+Icons+Outlined">
+
+	<!-- <script defer src="/__/firebase/9.0.1/firebase-app-compat.js"></script>
+	<script defer src="/__/firebase/9.0.1/firebase-functions-compat.js"></script> -->
+
 	<meta name="viewport" content="width=device-width, initial-scale=1" />
 
 	%svelte.head%
@@ -17,9 +21,7 @@
 <body>
 	<div id="svelte">%svelte.body%</div>
 
-	<script src="/__/firebase/8.10.0/firebase-app.js"></script>
-	<script src="/__/firebase/init.js"></script>
-	<script>
+	<!-- <script>
 		document.addEventListener('DOMContentLoaded', function () {
 			try {
 				let app = firebase.app();
@@ -29,7 +31,7 @@
 				console.error(e);
 			}
 		});
-	</script>
+	</script> -->
 </body>
 
 </html>
