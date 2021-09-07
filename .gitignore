@@ -6,3 +6,4 @@ node_modules
 .firebase
 src/routes/api/_config.js
 .vercel
+.env
