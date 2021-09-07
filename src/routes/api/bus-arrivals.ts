@@ -8,13 +8,12 @@ import type {
 	service
 } from 'src/types/busArrivals.type';
 
-export async function get() {
+export async function get({ query }) {
 	// DataMall API URL
 	const dataMallUrl = 'http://datamall2.mytransport.sg/ltaodataservice/BusArrivalv2';
-	const stopCodeParam = '?BusStopCode=19049';
 
 	// Send HTTP request
-	const res = await fetch(dataMallUrl + stopCodeParam, {
+	const res = await fetch(`${dataMallUrl}?BusStopCode=${query.get('stop-code')}`, {
 		headers: {
 			AccountKey: DATAMALL_KEY
 		}
