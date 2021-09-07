@@ -1,3 +1,4 @@
+import { ONEMAP_CREDENTIALS } from '$lib/env';
 import type { rawLeg, rawRoute, route, segment } from 'src/types/directions.type';
 
 async function getOneMapToken() {
@@ -10,10 +11,7 @@ async function getOneMapToken() {
 		headers: {
 			'content-type': 'application/json'
 		},
-		body: JSON.stringify({
-			email: process.env.ONEMAP_EMAIL,
-			password: process.env.ONEMAP_PASSWORD
-		})
+		body: ONEMAP_CREDENTIALS
 	});
 
 	const data = await res.json();

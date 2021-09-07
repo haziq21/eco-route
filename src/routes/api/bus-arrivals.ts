@@ -1,3 +1,4 @@
+import { DATAMALL_KEY } from '$lib/env';
 import type {
 	arrivals,
 	bus,
@@ -15,7 +16,7 @@ export async function get() {
 	// Send HTTP request
 	const res = await fetch(dataMallUrl + stopCodeParam, {
 		headers: {
-			AccountKey: process.env.DATAMALL_KEY
+			AccountKey: DATAMALL_KEY
 		}
 	});
 

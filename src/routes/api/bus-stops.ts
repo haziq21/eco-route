@@ -1,3 +1,4 @@
+import { DATAMALL_KEY } from '$lib/env';
 import type { busStop, rawBusStop } from 'src/types/busStops.type';
 
 export async function get() {
@@ -20,7 +21,7 @@ async function fetchData(iteration = 0) {
 	// HTTP request
 	const res = await fetch(url + skipParam, {
 		headers: {
-			AccountKey: process.env.DATAMALL_KEY
+			AccountKey: DATAMALL_KEY
 		}
 	});
 	let data: rawBusStop[] = (await res.json()).value;
