@@ -58,7 +58,7 @@
 					<!-- Destination searchbar -->
 					{#if $page.params.endpoint !== 'origin'}
 						<Searchbar
-							placeholder={$page.path === '/' ? 'Search location' : 'Enter your destination'}
+							placeholder={$page.path === '/' ? 'Search' : 'Enter your destination'}
 							bind:text={$destinationQuery.name}
 							name="destination"
 						/>
