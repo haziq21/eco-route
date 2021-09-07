@@ -17,5 +17,6 @@
 		border-radius: var(--border-radius);
 		padding: var(--space);
 		margin-bottom: var(--space);
+		overflow: hidden;
 	}
 </style>

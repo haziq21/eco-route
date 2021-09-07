@@ -43,3 +43,10 @@
 		{/if}
 	{/each}
 </Box>
+
+<style>
+	a {
+		white-space: nowrap;
+		overflow: hidden;
+	}
+</style>
