@@ -33,15 +33,37 @@
 		font-weight: bold;
 	}
 
-	.material-icons {
+	a.material-icons {
+		display: flex;
+		align-items: center;
+		justify-content: center;
 		position: absolute;
 		top: 70%;
 		left: 50%;
 		transform: translate(-50%, -50%);
-		padding: var(--space-sm);
+
+		width: 80px;
+		height: 80px;
 		border-radius: 100%;
-		color: var(--overlay);
-		background-color: var(--icon-text);
+		color: var(--header);
+		background-color: var(--background);
+
 		font-size: 4em;
+		/* font-weight: bolder; */
+		box-shadow: var(--shadow) inset;
+
+		animation: 2s infinite alternate blob;
+	}
+
+	@keyframes blob {
+		from {
+			width: 80px;
+			height: 80px;
+		}
+
+		to {
+			width: 100px;
+			height: 100px;
+		}
 	}
 </style>
