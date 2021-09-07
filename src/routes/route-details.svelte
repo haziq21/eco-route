@@ -1,3 +1,6 @@
+<script context="module">
+</script>
+
 <script lang="ts">
 	import Box from '$lib/Box.svelte';
 	import { selectedRoute } from './_stores';
@@ -68,7 +71,6 @@
 		width: var(--space);
 		height: 100px;
 		border-radius: 3px;
-		background-color: var(--header);
 	}
 
 	.transport-mode {
@@ -111,27 +113,5 @@
 
 	.bus {
 		background-color: rgb(45, 175, 105);
-	}
-
-	.mrt {
-		/* Fallback colour, in case something
-		goes wrong with the line names */
-		background-color: rgb(3, 89, 173);
-	}
-
-	.EW {
-		background-color: var(--MRT-EW);
-	}
-
-	.NS {
-		background-color: var(--MRT-NS);
-	}
-
-	.CC {
-		background-color: var(--MRT-CC);
-	}
-
-	.DT {
-		background-color: var(--MRT-DT);
 	}
 </style>

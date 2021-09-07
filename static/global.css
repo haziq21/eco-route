@@ -1,3 +1,4 @@
+/* Variables */
 :root {
 	/* Colour */
 	--text: #232724;
@@ -18,12 +19,20 @@
 	/* Border radius */
 	--border-radius: 10px;
 	--border-radius-sm: 5px;
+}
 
-	/* MRT line colours */
-	--MRT-EW: rgb(0, 147, 58);
-	--MRT-NS: rgb(235, 60, 16);
-	--MRT-CC: rgb(230, 219, 60);
-	--MRT-DT: rgb(0, 85, 183);
+/* MRT line colours */
+.EW {
+	background-color: rgb(0, 147, 58);
+}
+.NS {
+	background-color: rgb(235, 60, 16);
+}
+.CC {
+	background-color: rgb(230, 219, 60);
+}
+.DT {
+	background-color: rgb(0, 85, 183);
 }
 
 body {
