@@ -11,10 +11,7 @@ async function getOneMapToken() {
 		headers: {
 			'content-type': 'application/json'
 		},
-		body: JSON.stringify({
-			email: process.env.VITE_ONEMAP_EMAIL,
-			password: process.env.VITE_ONEMAP_PASSWORD
-		})
+		body: ONEMAP_CREDENTIALS
 	});
 
 	const data = await res.json();

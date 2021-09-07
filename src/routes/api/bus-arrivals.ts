@@ -16,7 +16,7 @@ export async function get() {
 	// Send HTTP request
 	const res = await fetch(dataMallUrl + stopCodeParam, {
 		headers: {
-			AccountKey: process.env.VITE_DATAMALL_KEY
+			AccountKey: DATAMALL_KEY
 		}
 	});
 
