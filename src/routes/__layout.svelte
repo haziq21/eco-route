@@ -1,3 +1,6 @@
+<!-- <script context="module">
+	export const ssr = false;
+</script> -->
 <script lang="ts">
 	import EmphasisedBox from '$lib/EmphasisedBox.svelte';
 	import Searchbar from '$lib/Searchbar.svelte';
@@ -5,7 +8,7 @@
 	import Chip from '$lib/Chip.svelte';
 	import { page } from '$app/stores';
 	import { fade, slide } from 'svelte/transition';
-	import { selectedRoute, destinationQuery, originQuery } from './_stores';
+	import { selectedRoute, destinationQuery, originQuery, currentPlace } from './_stores';
 
 	function hours(seconds: number) {
 		return Math.floor(seconds / 3600);
@@ -20,8 +23,8 @@
 	<div class="box">
 		<!-- "Go somewhere" homepage header -->
 		{#if $page.path === '/'}
-			<span class="header-layout" transition:slide>
-				<h1 transition:fade>Go somewhere</h1>
+			<span class="header-layout" out:slide>
+				<h1 out:fade>Go somewhere</h1>
 			</span>
 		{/if}
 
