@@ -1,9 +1,7 @@
-<script context="module">
-</script>
-
 <script lang="ts">
 	import Box from '$lib/Box.svelte';
 	import { selectedRoute } from './_stores';
+	import { fly } from 'svelte/transition';
 </script>
 
 <Box>
@@ -32,32 +30,31 @@
 	</div>
 </Box>
 
-<div class="alarm-container">
-	<span class="material-icons-outlined"> notifications </span>
-	<span>Wake me up <br /> on interchanges</span>
-</div>
+<div class="begin-guide" in:fly={{ y: 50, duration: 400 }}>Start travel guide</div>
 
 <style>
-	.alarm-container {
+	.begin-guide {
 		display: flex;
 		flex-direction: row;
 		align-items: center;
+
 		position: fixed;
-		bottom: 40px;
-		right: 30px;
-		padding: 6px 18px;
-		border-radius: var(--border-radius);
+		bottom: 30px;
+		left: 50%;
+		transform: translateX(-50%);
+
+		padding: var(--space-sm) var(--space-md);
+		border-radius: var(--border-radius-sm);
 		color: var(--overlay);
 		background-color: var(--header);
 		box-shadow: var(--shadow);
 		font-size: 1em;
-		/* font-weight: bold; */
 	}
 
-	.material-icons-outlined {
-		font-size: 36px;
-		margin-right: var(--space-md);
-		margin-left: calc(-1 * var(--space-md));
+	.begin-guide::before {
+		content: '\27A4';
+		margin-right: var(--space-sm);
+		transform: rotate(-90deg);
 	}
 
 	.timeline {
