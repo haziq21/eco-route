@@ -75,14 +75,11 @@
 	}
 
 	/* Route timeline segment colours */
-
 	.walk {
-		background-color: rgb(226, 226, 226);
 		color: rgb(130, 142, 150);
 	}
 
 	.bus {
 		color: var(--overlay);
-		background-color: rgb(45, 175, 105);
 	}
 </style>

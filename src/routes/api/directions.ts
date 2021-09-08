@@ -90,7 +90,8 @@ function formatSegment(data: rawLeg): segment {
 		mode: {
 			WALK: 'walk',
 			BUS: 'bus',
-			SUBWAY: 'mrt'
+			SUBWAY: 'mrt',
+			TRAM: 'lrt'
 		}[data.mode],
 		modeIdentity: data.route,
 		startLocation: data.from.name,

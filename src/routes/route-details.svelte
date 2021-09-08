@@ -103,12 +103,4 @@
 		font-size: 1.1em;
 		font-weight: bolder;
 	}
-
-	.walk {
-		background-color: rgb(226, 226, 226);
-	}
-
-	.bus {
-		background-color: rgb(45, 175, 105);
-	}
 </style>
