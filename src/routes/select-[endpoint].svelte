@@ -1,3 +1,7 @@
+<script context="module">
+	export const ssr = false;
+</script>
+
 <script lang="ts">
 	import { page } from '$app/stores';
 	import Box from '$lib/Box.svelte';
