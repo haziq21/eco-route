@@ -2,13 +2,11 @@ import { DATAMALL_KEY } from '$lib/env';
 import type { busStop, rawBusStop } from 'src/types/busStops.type';
 
 export async function get() {
-	const data = (await fetchData()).map((x) => formatBusStop(x));
+	const data = (await fetchData()).map(formatBusStop);
 
 	if (data) {
 		return {
-			body: {
-				data
-			}
+			body: data
 		};
 	}
 }
@@ -16,10 +14,9 @@ export async function get() {
 async function fetchData(iteration = 0) {
 	// DataMall bus stops API
 	const url = 'http://datamall2.mytransport.sg/ltaodataservice/BusStops';
-	const skipParam = '?$skip=' + iteration * 500;
 
 	// HTTP request
-	const res = await fetch(url + skipParam, {
+	const res = await fetch(`${url}?$skip=${iteration * 500}`, {
 		headers: {
 			AccountKey: DATAMALL_KEY
 		}
@@ -39,6 +36,8 @@ async function fetchData(iteration = 0) {
 function formatBusStop(data: rawBusStop): busStop {
 	return {
 		name: data.Description,
-		code: data.BusStopCode
+		code: data.BusStopCode,
+		latitude: data.Latitude,
+		longitude: data.Longitude
 	};
 }
