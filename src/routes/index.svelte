@@ -34,16 +34,16 @@
 	$: if (searchText) searchBusStops(searchText).then((res) => (searchResults = res));
 
 	// Service worker registration
-	onMount(async () => {
-		if ('serviceWorker' in navigator) {
-			try {
-				const registration = await navigator.serviceWorker.register('/service-worker.js');
-				console.log('ServiceWorker registration successful with scope: ', registration.scope);
-			} catch (e) {
-				console.log('ServiceWorker registration failed: ', e);
-			}
-		}
-	});
+	// onMount(async () => {
+	// 	if ('serviceWorker' in navigator) {
+	// 		try {
+	// 			const registration = await navigator.serviceWorker.register('/service-worker.js');
+	// 			console.log('ServiceWorker registration successful with scope: ', registration.scope);
+	// 		} catch (e) {
+	// 			console.log('ServiceWorker registration failed: ', e);
+	// 		}
+	// 	}
+	// });
 
 	// Fetches bus arrivals at bus stops nearby
 	async function getNearbyArrivals() {
