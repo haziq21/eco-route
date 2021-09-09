@@ -12,9 +12,13 @@ export interface service {
 	arrivals: bus[];
 }
 
-export interface arrivals {
+export interface namelessArrivals {
 	busStopCode: string;
 	services: service[];
+}
+
+export interface arrivals extends namelessArrivals {
+	busStopName: string;
 }
 
 // Types for unformatted (raw) JSON data

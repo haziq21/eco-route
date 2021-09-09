@@ -1,7 +1,7 @@
 import { DATAMALL_KEY } from '$lib/env';
 import type {
-	arrivals,
 	bus,
+	namelessArrivals,
 	rawArrivals,
 	rawBus,
 	rawService,
@@ -27,7 +27,7 @@ export async function get({ query }) {
 	};
 }
 
-function formatArrivals(data: rawArrivals): arrivals {
+function formatArrivals(data: rawArrivals): namelessArrivals {
 	// Some bus numbers / codes have letters as well as numbers,
 	// so here we're sorting by number first then by letter.
 	function busNumberSort(bus1: service, bus2: service) {
