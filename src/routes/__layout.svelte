@@ -51,7 +51,7 @@
 						<Searchbar
 							placeholder="Enter your origin"
 							bind:text={$originQuery.name}
-							name="origin"
+							redirect="select-origin"
 						/>
 					{/if}
 
@@ -60,7 +60,7 @@
 						<Searchbar
 							placeholder={$page.path === '/' ? 'Search' : 'Enter your destination'}
 							bind:text={$destinationQuery.name}
-							name="destination"
+							redirect="select-destination"
 						/>
 					{/if}
 				</div>

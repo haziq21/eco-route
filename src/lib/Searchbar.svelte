@@ -1,15 +1,14 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
-	import { page } from '$app/stores';
 
 	export let placeholder: string;
 	export let text = '';
-	export let name: 'origin' | 'destination' = undefined;
+	export let redirect: string = undefined;
 	let ref: HTMLInputElement;
 
-	function redirect() {
-		if (!$page.params.endpoint && name) {
-			goto(`/select-${name}`, { keepfocus: true });
+	function pageRedirect() {
+		if (redirect) {
+			goto(`/${redirect}`, { keepfocus: true });
 			if (text == 'Current location') {
 				text = '';
 			}
@@ -17,7 +16,7 @@
 	}
 </script>
 
-<input type="text" {placeholder} bind:value={text} bind:this={ref} on:click={redirect} />
+<input type="text" {placeholder} bind:value={text} bind:this={ref} on:click={pageRedirect} />
 
 <style>
 	input {
