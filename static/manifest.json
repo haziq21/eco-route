@@ -16,5 +16,7 @@
     "start_url": "/",
     "display": "standalone",
     "description": "Route calculation with only public transport",
-    "scope": "/"
+    "scope": "/",
+    "background_color": "#f0f0f0",
+    "theme_color": "#1d9c4f"
 }
