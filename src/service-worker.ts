@@ -26,6 +26,12 @@ self.addEventListener('install', (event: ExtendableEvent) => {
 	event.waitUntil(caches.open(CACHE_NAME).then((cache) => cache.addAll(build.concat(files))));
 });
 
+// Purge old caches
+self.addEventListener('activate', (event: ExtendableEvent) => {
+	// cacheNames[0] because there should only be one cache key (ecoroute-cache-<timestamp>)
+	event.waitUntil(caches.keys().then((cacheNames) => caches.delete(cacheNames[0])));
+});
+
 // Intercept fetch events and return cached responses when available
 self.addEventListener('fetch', (event: FetchEvent) => {
 	const { request } = event;
