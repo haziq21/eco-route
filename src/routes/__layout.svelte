@@ -143,7 +143,7 @@
 	}
 
 	.extra {
-		font-size: 1em;
+		font-size: 0.9em;
 		/* margin: 3px 0 var(--space) 0; */
 	}
 </style>
