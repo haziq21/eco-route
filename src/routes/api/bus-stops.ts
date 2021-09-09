@@ -2,13 +2,9 @@ import { DATAMALL_KEY } from '$lib/env';
 import type { busStop, rawBusStop } from 'src/types/busStops.type';
 
 export async function get() {
-	const data = (await fetchData()).map(formatBusStop);
-
-	if (data) {
-		return {
-			body: data
-		};
-	}
+	return {
+		body: (await fetchData()).map(formatBusStop)
+	};
 }
 
 async function fetchData(iteration = 0) {

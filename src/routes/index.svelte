@@ -9,14 +9,10 @@
 	import Searchbar from '$lib/Searchbar.svelte';
 	import type { arrivals } from 'src/types/busArrivals.type';
 	import type { busStop } from 'src/types/busStops.type';
-	import { onMount } from 'svelte';
 	import { currentPlace, destinationQuery, originQuery } from './_stores';
 
 	// Content of bus number / bus stop searchbar
 	let searchText: string;
-	// Content of searchbar before searchText was updated
-	// (this is updated in searchBusStops())
-	let previousSearchText: string;
 
 	// Clear destination query when user goes back to home page
 	$destinationQuery = {
@@ -32,18 +28,6 @@
 	// Search results
 	let searchResults: busStop[] = [];
 	$: if (searchText) searchBusStops(searchText).then((res) => (searchResults = res));
-
-	// Service worker registration
-	// onMount(async () => {
-	// 	if ('serviceWorker' in navigator) {
-	// 		try {
-	// 			const registration = await navigator.serviceWorker.register('/service-worker.js');
-	// 			console.log('ServiceWorker registration successful with scope: ', registration.scope);
-	// 		} catch (e) {
-	// 			console.log('ServiceWorker registration failed: ', e);
-	// 		}
-	// 	}
-	// });
 
 	// Fetches bus arrivals at bus stops nearby
 	async function getNearbyArrivals() {
@@ -143,7 +127,11 @@
 
 <Box>
 	<h1>Bus arrivals</h1>
-	<Searchbar placeholder="Search for a bus number or stop" bind:text={searchText} />
+	<Searchbar
+		placeholder="Search for a bus number or stop"
+		redirect="search-bus-stops"
+		bind:text={searchText}
+	/>
 	{#if !searchText}
 		{#await getNearbyArrivals()}
 			<p>loading...</p>

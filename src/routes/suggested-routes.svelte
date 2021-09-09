@@ -14,12 +14,12 @@
 	}
 
 	async function getDirections(
-		{ latitude: fromLat, longitude: fromLon }: place,
-		{ latitude: toLat, longitude: toLon }: place
+		{ latitude: fromLat, longitude: fromLon },
+		{ latitude: toLat, longitude: toLon }
 	) {
-		const fromQuery = `${fromLat},${fromLon}`;
-		const toQuery = `${toLat},${toLon}`;
-		const res = await fetch(`/api/directions?from=${fromQuery}&to=${toQuery}`);
+		const fromQuery = `from=${fromLat},${fromLon}`;
+		const toQuery = `to=${toLat},${toLon}`;
+		const res = await fetch(`/api/directions?${fromQuery}&${toQuery}`);
 		const data = await res.json();
 
 		return data;
