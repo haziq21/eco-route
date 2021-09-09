@@ -5,7 +5,7 @@
 	export let arrivals: arrivals;
 </script>
 
-<h3>{arrivals.busStopCode}</h3>
+<h3>{arrivals.busStopName}</h3>
 <div class="bus-stop">
 	{#each arrivals.services as service}
 		<!-- Bus number -->

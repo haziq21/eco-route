@@ -48,21 +48,32 @@
 	// Fetches bus arrivals at bus stops nearby
 	async function getNearbyArrivals() {
 		const nearbyBusStops = await getNearbyBusStops();
-		return Promise.all(nearbyBusStops.map(async (stop) => await getBusArrivals(stop.code)));
+		return Promise.all(nearbyBusStops.map(async (stop) => await getBusArrivals(stop)));
 	}
 
 	// Fetches bus arrival timings at a bus stop
-	async function getBusArrivals(busStopCode: string): Promise<arrivals> {
-		const res = await fetch(`/api/bus-arrivals?stop-code=${busStopCode}`);
-		return await res.json();
+	async function getBusArrivals(busStop: busStop): Promise<arrivals> {
+		const res = await fetch(`/api/bus-arrivals?stop-code=${busStop.code}`);
+		const data: arrivals = await res.json();
+		data.busStopName = busStop.name;
+		return data;
 	}
 
 	// Fetches bus stops within 500 metres of user
 	async function getNearbyBusStops() {
 		const data = await getAllBusStops();
+		let nearbyStops: { distance: number; stop: busStop }[] = [];
 
-		// Only return bus stops less than 0.5km away
-		return data.filter((stop) => distanceBetween($currentPlace, stop) <= 0.5);
+		// Only get bus stops 0.5km away or less
+		for (let i = 0; i < data.length; i++) {
+			let distance = distanceBetween($currentPlace, data[i]);
+			if (distance <= 0.5) nearbyStops.push({ distance, stop: data[i] });
+		}
+
+		// Sort bus stops by distance
+		return nearbyStops
+			.sort((stop1, stop2) => stop1.distance - stop2.distance)
+			.map((stop) => stop.stop);
 	}
 
 	// Fetches all bus stops
