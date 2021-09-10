@@ -13,6 +13,11 @@
 	);
 	$: showRouteSummary = $page.path === '/route-details';
 
+	function back() {
+		if ($page.path === '/suggested-routes') history.go(-2);
+		else history.back();
+	}
+
 	// Wraps a string in a span tag
 	function wrapInSpan(text: string | number, classes = 'number') {
 		return `<span class="${classes}">${text}</span>`;
@@ -57,12 +62,7 @@
 		<!-- Hide back button on homepage -->
 		{#if $page.path !== '/'}
 			<!-- Back button -->
-			<a
-				href={$page.path !== '/route-details' ? '/' : '/suggested-routes'}
-				class="material-icons back-button"
-			>
-				arrow_back_ios
-			</a>
+			<span on:click={back} class="material-icons back-button"> arrow_back_ios </span>
 		{:else}
 			<!-- redirect="/ringing-alarm" because this is a fake button -->
 			<Chip icon="home" redirect="/ringing-alarm">Home</Chip>
@@ -88,6 +88,7 @@
 				/>
 			{/if}
 
+			<!-- Route summary bar -->
 			{#if showRouteSummary}
 				<RouteTimeline route={$selectedRoute} />
 				<div class="route-layout">
