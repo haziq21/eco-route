@@ -8,6 +8,7 @@
 	import BusArrivals from '$lib/BusArrivals.svelte';
 	import Searchbar from '$lib/Searchbar.svelte';
 	import type { arrivals } from 'src/types/busArrivals.type';
+	import type { service } from 'src/types/busServices.type';
 	import type { busStop } from 'src/types/busStops.type';
 	import type { place } from 'src/types/places.type';
 	import { onDestroy } from 'svelte';
@@ -30,8 +31,11 @@
 	$: $originQuery = $currentPlace;
 
 	// Search results
-	let searchResults: busStop[] = [];
-	$: if (searchText) searchBusStops(searchText).then((res) => (searchResults = res));
+	let searchResults: { stops: busStop[]; services: service[] } = { stops: [], services: [] };
+	$: if (searchText) {
+		searchBusStops(searchText).then((res) => (searchResults.stops = res));
+		searchBusses(searchText).then((res) => (searchResults.services = res));
+	}
 
 	let nearbyArrivals: arrivals[];
 	// Update arrivals every 30 seconds
@@ -109,7 +113,14 @@
 			.map((stop) => stop.stop);
 	}
 
-	async function searchBusses(query: string) {}
+	async function searchBusses(query: string) {
+		const res = await fetch('/api/bus-services');
+		const data: service[] = await res.json();
+
+		// Return first 10 bus services with bus numbers that match the query
+		return data.filter((service) => service.number.includes(query)).slice(0, 11);
+	}
+
 	// Gets distance between two latitude-longitude points in km (using the Haversine formula)
 	// From https://stackoverflow.com/a/27943
 	function distanceBetween(
@@ -148,20 +159,27 @@
 			loading...
 		{/if}
 	{:else}
-		<!-- {#if }
-		
-	{/if} -->
-		<!-- Bus stop search results -->
-		{#if searchResults.length}
-			<p>Bus stops</p>
-			<ul>
-				{#each searchResults as busStop}
-					<li>
-						<a href="/bus-stop/{busStop.code}">{busStop.name} {busStop.code}</a>
-					</li>
-				{/each}
-			</ul>
+		{#if searchResults.services.length}
+			<p>Bus services</p>
 		{/if}
+		<ul>
+			{#each searchResults.services as service}
+				<li>
+					<a href="/bus-service/{service.number}">{service.number}</a>
+				</li>
+			{/each}
+		</ul>
+		<!-- Bus stop search results -->
+		{#if searchResults.stops.length}
+			<p>Bus stops</p>
+		{/if}
+		<ul>
+			{#each searchResults.stops as busStop}
+				<li>
+					<a href="/bus-stop/{busStop.code}">{busStop.name} {busStop.code}</a>
+				</li>
+			{/each}
+		</ul>
 	{/if}
 </Box>
 
