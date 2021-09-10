@@ -28,8 +28,17 @@ self.addEventListener('install', (event: ExtendableEvent) => {
 
 // Purge old caches
 self.addEventListener('activate', (event: ExtendableEvent) => {
-	// cacheNames[0] because there should only be one cache key (ecoroute-cache-<timestamp>)
-	event.waitUntil(caches.keys().then((cacheNames) => caches.delete(cacheNames[0])));
+	event.waitUntil(
+		caches.keys().then((cacheNames) =>
+			Promise.all(
+				cacheNames.map((cacheName) => {
+					if (CACHE_NAME !== cacheName) {
+						return caches.delete(cacheName);
+					}
+				})
+			)
+		)
+	);
 });
 
 // Intercept fetch events and return cached responses when available
