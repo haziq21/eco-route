@@ -40,6 +40,12 @@
 	}
 
 	let nearbyArrivals: arrivals[];
+
+	// Get nearby arrivals immediately instead of waiting for setInterval.
+	// Reactive declaration so that it updates when $currentPlace is finally fetched.
+	// (there is some geolocation delay when the app loads)
+	$: getNearbyArrivals($currentPlace).then((res) => (nearbyArrivals = res));
+
 	// Update arrivals every 30 seconds
 	let arrivalInterval = setInterval(() => {
 		getNearbyArrivals($currentPlace).then((res) => (nearbyArrivals = res));
@@ -157,12 +163,14 @@
 		on:focus={() => goto('/#box', { keepfocus: true })}
 	/>
 	{#if !searchText}
-		{#if nearbyArrivals}
+		{#if !$currentPlace.latitude}
+			<p>Getting current location...</p>
+		{:else if nearbyArrivals}
 			{#each nearbyArrivals as busStop}
 				<BusArrivals arrivals={busStop} />
 			{/each}
 		{:else}
-			loading...
+			<p>Loading bus arrivals...</p>
 		{/if}
 	{:else}
 		<!-- Bus service search results -->
