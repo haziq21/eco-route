@@ -159,6 +159,7 @@
 			loading...
 		{/if}
 	{:else}
+		<!-- Bus service search results -->
 		{#if searchResults.services.length}
 			<p>Bus services</p>
 		{/if}
