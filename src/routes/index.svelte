@@ -10,7 +10,10 @@
 	import type { arrivals } from 'src/types/busArrivals.type';
 	import type { busStop } from 'src/types/busStops.type';
 	import type { place } from 'src/types/places.type';
+	import { onDestroy } from 'svelte';
 	import { currentPlace, destinationQuery, originQuery } from './_stores';
+
+	onDestroy(() => clearInterval(arrivalInterval));
 
 	// Content of bus number / bus stop searchbar
 	let searchText: string;
@@ -32,7 +35,7 @@
 
 	let nearbyArrivals: arrivals[];
 	// Update arrivals every 30 seconds
-	setTimeout(() => {
+	let arrivalInterval = setInterval(() => {
 		getNearbyArrivals($currentPlace).then((res) => (nearbyArrivals = res));
 	}, 30000);
 
@@ -106,6 +109,7 @@
 			.map((stop) => stop.stop);
 	}
 
+	async function searchBusses(query: string) {}
 	// Gets distance between two latitude-longitude points in km (using the Haversine formula)
 	// From https://stackoverflow.com/a/27943
 	function distanceBetween(
@@ -144,10 +148,27 @@
 			loading...
 		{/if}
 	{:else}
-		{#each searchResults as busStop}
-			<a href="/bus-stop/{busStop.code}">{busStop.name} {busStop.code}</a><br />
-		{:else}
-			No results
-		{/each}
+		<!-- {#if }
+		
+	{/if} -->
+		<!-- Bus stop search results -->
+		{#if searchResults.length}
+			<p>Bus stops</p>
+			<ul>
+				{#each searchResults as busStop}
+					<li>
+						<a href="/bus-stop/{busStop.code}">{busStop.name} {busStop.code}</a>
+					</li>
+				{/each}
+			</ul>
+		{/if}
 	{/if}
 </Box>
+
+<style>
+	ul {
+		list-style: none;
+		margin: 0;
+		padding: 0;
+	}
+</style>
