@@ -196,6 +196,11 @@
 				</li>
 			{/each}
 		</ul>
+
+		<!-- No results -->
+		{#if !searchResults.stops.length && !searchResults.services.length}
+			<p>No results...</p>
+		{/if}
 	{/if}
 </Box>
 
