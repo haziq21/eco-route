@@ -127,11 +127,7 @@
 
 <Box>
 	<h1>Bus arrivals</h1>
-	<Searchbar
-		placeholder="Search for a bus number or stop"
-		redirect="search-bus-stops"
-		bind:text={searchText}
-	/>
+	<Searchbar placeholder="Search for a bus number or stop" bind:text={searchText} />
 	{#if !searchText}
 		{#await getNearbyArrivals()}
 			<p>loading...</p>
