@@ -9,6 +9,7 @@
 	import Searchbar from '$lib/Searchbar.svelte';
 	import type { arrivals } from 'src/types/busArrivals.type';
 	import type { busStop } from 'src/types/busStops.type';
+	import type { place } from 'src/types/places.type';
 	import { currentPlace, destinationQuery, originQuery } from './_stores';
 
 	// Content of bus number / bus stop searchbar
@@ -29,9 +30,15 @@
 	let searchResults: busStop[] = [];
 	$: if (searchText) searchBusStops(searchText).then((res) => (searchResults = res));
 
+	let nearbyArrivals: arrivals[];
+	// Update arrivals every 30 seconds
+	setTimeout(() => {
+		getNearbyArrivals($currentPlace).then((res) => (nearbyArrivals = res));
+	}, 30000);
+
 	// Fetches bus arrivals at bus stops nearby
-	async function getNearbyArrivals() {
-		const nearbyBusStops = await getNearbyBusStops();
+	async function getNearbyArrivals(here: place) {
+		const nearbyBusStops = await getNearbyBusStops(here);
 		return Promise.all(nearbyBusStops.map(async (stop) => await getBusArrivals(stop)));
 	}
 
@@ -44,13 +51,13 @@
 	}
 
 	// Fetches bus stops within 500 metres of user
-	async function getNearbyBusStops() {
+	async function getNearbyBusStops(here: place) {
 		const data = await getAllBusStops();
 		let nearbyStops: { distance: number; stop: busStop }[] = [];
 
 		// Only get bus stops 0.5km away or less
 		for (let i = 0; i < data.length; i++) {
-			let distance = distanceBetween($currentPlace, data[i]);
+			let distance = distanceBetween(here, data[i]);
 			if (distance <= 0.5) nearbyStops.push({ distance, stop: data[i] });
 		}
 
@@ -129,18 +136,16 @@
 	<h1>Bus arrivals</h1>
 	<Searchbar placeholder="Search for a bus number or stop" bind:text={searchText} />
 	{#if !searchText}
-		{#await getNearbyArrivals()}
-			<p>loading...</p>
-		{:then response}
-			{#each response as busStop}
+		{#if nearbyArrivals}
+			{#each nearbyArrivals as busStop}
 				<BusArrivals arrivals={busStop} />
 			{/each}
-		{:catch error}
-			<p>error: {error.message}</p>
-		{/await}
+		{:else}
+			loading...
+		{/if}
 	{:else}
 		{#each searchResults as busStop}
-			{busStop.name} {busStop.code}<br />
+			<a href="/bus-stop/{busStop.code}">{busStop.name} {busStop.code}</a><br />
 		{:else}
 			No results
 		{/each}
