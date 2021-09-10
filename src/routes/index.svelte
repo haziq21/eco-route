@@ -170,6 +170,7 @@
 				</li>
 			{/each}
 		</ul>
+
 		<!-- Bus stop search results -->
 		{#if searchResults.stops.length}
 			<p>Bus stops</p>
@@ -177,7 +178,7 @@
 		<ul>
 			{#each searchResults.stops as busStop}
 				<li>
-					<a href="/bus-stop/{busStop.code}">{busStop.name} {busStop.code}</a>
+					<a href="/bus-stop/{busStop.code}/{busStop.name}">{busStop.name} {busStop.code}</a>
 				</li>
 			{/each}
 		</ul>

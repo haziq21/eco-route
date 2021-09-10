@@ -12,6 +12,7 @@
 		$page.path
 	);
 	$: showRouteSummary = $page.path === '/route-details';
+	$: showBusStop = $page.path.includes('/bus-stop/');
 
 	function back() {
 		if ($page.path === '/suggested-routes') history.go(-2);
@@ -50,6 +51,9 @@
 	}
 </script>
 
+<!-- I know there are a lot of {#if }s. I'd use layout resets on each page but since
+	 SvelteKit is still in beta, layout resets are still a bit buggy. For instance, 
+	 the layout is loaded twice upon navigation if it triggers some animation. -->
 <div class="box">
 	<!-- "Go somewhere" homepage header -->
 	{#if $page.path === '/'}
@@ -95,6 +99,10 @@
 					{@html getArriveTimeHTML($selectedRoute)}
 					{@html getDurationHTML($selectedRoute)}
 				</div>
+			{/if}
+
+			{#if showBusStop}
+				{$page.params.name} {$page.params.code}
 			{/if}
 		</div>
 	</div>
