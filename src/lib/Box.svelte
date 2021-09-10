@@ -2,7 +2,7 @@
 	export let title = undefined;
 </script>
 
-<div class="box">
+<div id="box">
 	{#if title}
 		<h1>{title}</h1>
 	{/if}
@@ -10,7 +10,7 @@
 </div>
 
 <style>
-	.box {
+	#box {
 		background-color: var(--overlay);
 		color: var(--text);
 		box-shadow: var(--shadow);

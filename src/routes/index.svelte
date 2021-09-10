@@ -4,6 +4,8 @@
 </script>
 
 <script lang="ts">
+	import { goto } from '$app/navigation';
+
 	import Box from '$lib/Box.svelte';
 	import BusArrivals from '$lib/BusArrivals.svelte';
 	import Searchbar from '$lib/Searchbar.svelte';
@@ -149,7 +151,11 @@
 
 <Box>
 	<h1>Bus arrivals</h1>
-	<Searchbar placeholder="Search for a bus number or stop" bind:text={searchText} />
+	<Searchbar
+		placeholder="Search for a bus number or stop"
+		bind:text={searchText}
+		on:focus={() => goto('/#box', { keepfocus: true })}
+	/>
 	{#if !searchText}
 		{#if nearbyArrivals}
 			{#each nearbyArrivals as busStop}

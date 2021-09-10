@@ -16,7 +16,14 @@
 	}
 </script>
 
-<input type="text" {placeholder} bind:value={text} bind:this={ref} on:click={pageRedirect} />
+<input
+	type="text"
+	{placeholder}
+	bind:value={text}
+	bind:this={ref}
+	on:click={pageRedirect}
+	on:focus
+/>
 
 <style>
 	input {
