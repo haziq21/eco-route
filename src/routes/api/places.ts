@@ -1,6 +1,6 @@
 import type { place, rawPlace, rawPlacesRoot } from 'src/types/places.type';
 
-export async function get({ query }) {
+export async function get({ query }: { query: URLSearchParams }): Promise<{ body: place[] }> {
 	if (!query.get('search')) {
 		return { body: [] };
 	}
@@ -27,6 +27,8 @@ function formatPlace(data: rawPlace): place {
 	};
 }
 
+// Returns unique places (sometimes with housing estates OneMap returns
+// multiple addresses for multiple units within the estate, but we don't need this)
 function uniq(places: place[]): place[] {
 	const seen = {};
 	return places.filter(({ name }) => {

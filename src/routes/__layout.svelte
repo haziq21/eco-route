@@ -4,7 +4,7 @@
 	import Chip from '$lib/Chip.svelte';
 	import { page } from '$app/stores';
 	import { fade, slide } from 'svelte/transition';
-	import { selectedRoute, destinationQuery, originQuery, currentPlace } from './_stores';
+	import { selectedRoute, destinationQuery, originQuery } from './_stores';
 
 	// Declaring some logic here to reduce clutter in HTML
 	$: showOriginSearchbar = ['/select-origin', '/suggested-routes'].includes($page.path);

@@ -40,11 +40,9 @@ export async function get({ query }) {
 	const res = await fetch(`${url}?${queryParams}`);
 	const data = (await res.json()).plan.itineraries;
 
-	// if (data) {
 	return {
 		body: data.map(formatRoute).map(sanitiseRoute)
 	};
-	// }
 }
 
 function sanitiseRoute(data: route): route {
