@@ -34,23 +34,30 @@
 </script>
 
 <Box>
-	{#each searchResults as location}
-		<a href="/suggested-routes" on:click={() => ($locationQuery = location)}>
-			{location.name}
-		</a>
-		<br />
+	{#if $locationQuery.name}
+		<ul>
+			{#each searchResults as location}
+				<li on:click={() => ($locationQuery = location)}>
+					<a href="/suggested-routes">{location.name}</a>
+				</li>
+			{:else}
+				"{$locationQuery.name}" not found
+			{/each}
+		</ul>
 	{:else}
-		{#if $locationQuery.name}
-			"{$locationQuery.name}" not found
-		{:else}
-			type a location to search
-		{/if}
-	{/each}
+		type a location to search
+	{/if}
 </Box>
 
 <style>
-	a {
+	/* li {
 		white-space: nowrap;
 		overflow: hidden;
+	} */
+
+	ul {
+		list-style: none;
+		padding: 0;
+		margin: 0;
 	}
 </style>
