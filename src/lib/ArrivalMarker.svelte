@@ -34,12 +34,12 @@
 		align-items: flex-end;
 		grid-area: number;
 		font-weight: bolder;
-		font-size: 1.3em;
+		font-size: 1.3rem;
 	}
 
 	.time-unit {
 		grid-area: time-unit;
-		font-size: 0.9em;
+		font-size: 0.9rem;
 	}
 
 	.icons {

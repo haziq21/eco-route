@@ -18,7 +18,7 @@
 		background-color: var(--header);
 	}
 	h1 {
-		font-size: 2.5em;
+		font-size: 2.5rem;
 	}
 	.alarm-text {
 		position: absolute;
@@ -48,7 +48,7 @@
 		color: var(--header);
 		background-color: var(--background);
 
-		font-size: 4em;
+		font-size: 4rem;
 		/* font-weight: bolder; */
 		box-shadow: var(--shadow) inset;
 

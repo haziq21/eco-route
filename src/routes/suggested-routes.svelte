@@ -77,7 +77,7 @@
 
 <style>
 	.extra {
-		font-size: 0.8em;
+		font-size: 0.8rem;
 		grid-column: 1 / 3;
 		margin: 3px 0 var(--space) 0;
 	}
@@ -91,7 +91,7 @@
 	}
 
 	.time {
-		font-size: 1.1em;
+		font-size: 1.1rem;
 		text-align: right;
 	}
 

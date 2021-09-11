@@ -38,7 +38,7 @@
 		background-color: var(--input-field);
 		color: var(--icon-text);
 		opacity: 1;
-		font-size: 1em;
+		font-size: 1rem;
 		border: none;
 		border-radius: var(--border-radius-sm);
 		transition: 0.3s;

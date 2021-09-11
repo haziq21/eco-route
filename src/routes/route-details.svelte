@@ -48,7 +48,7 @@
 		color: var(--overlay);
 		background-color: var(--header);
 		box-shadow: var(--shadow);
-		font-size: 1em;
+		font-size: 1rem;
 	}
 
 	.begin-guide::before {
@@ -100,7 +100,7 @@
 		position: absolute;
 		top: 0;
 		transform: translateY(-50%);
-		font-size: 1.1em;
+		font-size: 1.1rem;
 		font-weight: bolder;
 	}
 </style>

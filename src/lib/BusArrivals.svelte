@@ -49,7 +49,7 @@
 
 	.separator {
 		margin: 0 28px;
-		font-size: 1.5em;
+		font-size: 1.5rem;
 		transform: scale(-1, 1);
 		color: var(--icon-text);
 	}
