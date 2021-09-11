@@ -14,6 +14,7 @@
 	$: showRouteSummary = $page.path === '/route-details';
 	$: showBusStop = $page.path.includes('/bus-stop/');
 
+	// Goes to the previous page
 	function back() {
 		if ($page.path === '/suggested-routes') history.go(-2);
 		else history.back();
@@ -53,7 +54,7 @@
 
 <!-- I know there are a lot of {#if }s. I'd use layout resets on each page but since
 	 SvelteKit is still in beta, layout resets are still a bit buggy. For instance, 
-	 the layout is loaded twice upon navigation if it triggers some animation. -->
+	 the layout is loaded twice upon navigation if navigation triggers animation. -->
 <div class="box">
 	<!-- "Go somewhere" homepage header -->
 	{#if $page.path === '/'}
@@ -73,51 +74,69 @@
 			<Chip icon="work">Work</Chip>
 		{/if}
 
-		<div class="searchbar-layout">
-			<!-- Origin searchbar -->
-			{#if showOriginSearchbar}
-				<Searchbar
-					placeholder="Enter your origin"
-					bind:text={$originQuery.name}
-					redirect="select-origin"
-				/>
-			{/if}
+		<!-- Bus stop name -->
+		{#if showBusStop}
+			<h2>{$page.params.busStopName}</h2>
+			<span class="bus-stop-code">{$page.params.busStopCode}</span>
+		{:else}
+			<div class="searchbar-layout">
+				<!-- Origin searchbar -->
+				{#if showOriginSearchbar}
+					<Searchbar
+						placeholder="Enter your origin"
+						bind:text={$originQuery.name}
+						redirect="select-origin"
+					/>
+				{/if}
 
-			<!-- Destination searchbar -->
-			{#if showDestinationSearchbar}
-				<Searchbar
-					placeholder={$page.path === '/' ? 'Search' : 'Enter your destination'}
-					bind:text={$destinationQuery.name}
-					redirect="select-destination"
-				/>
-			{/if}
+				<!-- Destination searchbar -->
+				{#if showDestinationSearchbar}
+					<Searchbar
+						placeholder={$page.path === '/' ? 'Search' : 'Enter your destination'}
+						bind:text={$destinationQuery.name}
+						redirect="select-destination"
+					/>
+				{/if}
 
-			<!-- Route summary bar -->
-			{#if showRouteSummary}
-				<RouteTimeline route={$selectedRoute} />
-				<div class="route-layout">
-					{@html getArriveTimeHTML($selectedRoute)}
-					{@html getDurationHTML($selectedRoute)}
-				</div>
-			{/if}
-
-			{#if showBusStop}
-				{$page.params.busStopName} {$page.params.busStopCode}
-			{/if}
-		</div>
+				<!-- Route summary bar -->
+				{#if showRouteSummary}
+					<RouteTimeline route={$selectedRoute} />
+					<div class="route-layout">
+						{@html getArriveTimeHTML($selectedRoute)}
+						{@html getDurationHTML($selectedRoute)}
+					</div>
+				{/if}
+			</div>
+		{/if}
 	</div>
 </div>
 
 <slot />
 
 <style>
+	h2 {
+		display: flex;
+		align-items: center;
+		margin: 0;
+	}
+
+	.bus-stop-code {
+		display: flex;
+		align-items: center;
+		margin-left: var(--space);
+		color: var(--icon-text);
+		font-size: 0.9rem;
+		font-weight: bold;
+	}
+
 	.box {
-		background-color: var(--header);
-		color: var(--overlay);
-		box-shadow: var(--shadow), 0 0 10px var(--space) var(--background);
 		border-radius: var(--border-radius);
+		color: var(--overlay);
+		background-color: var(--header);
+		box-shadow: var(--shadow), 0 0 10px var(--space) var(--background);
 		padding: var(--space);
 		margin-bottom: var(--space);
+
 		z-index: 1;
 	}
 
@@ -152,10 +171,10 @@
 	}
 
 	:global(.time) {
-		font-size: 1.2em;
+		font-size: 1.2rem;
 	}
 
 	:global(.extra) {
-		font-size: 0.9em;
+		font-size: 0.9rem;
 	}
 </style>

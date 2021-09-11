@@ -44,6 +44,12 @@ async function getAllBusStops(): Promise<busStop[]> {
 	return data;
 }
 
+// Fetches a bus stop from its bus stop code
+export async function getBusStop(code: string): Promise<busStop> {
+	const data = await getAllBusStops();
+	return data.find((busStop) => busStop.code === code);
+}
+
 // Searches for bus stops by name or code
 export async function searchBusStops(query: string): Promise<busStop[]> {
 	// Case-insensitive keyword search
