@@ -50,14 +50,22 @@
 </Box>
 
 <style>
-	/* li {
-		white-space: nowrap;
-		overflow: hidden;
-	} */
-
 	ul {
+		position: relative;
 		list-style: none;
 		padding: 0;
 		margin: 0;
+		white-space: nowrap;
 	}
+
+	/* ul::before {
+		content: '';
+		display: block;
+		position: absolute;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 100%;
+		box-shadow: inset -14px 0 black;
+	} */
 </style>
