@@ -85,7 +85,7 @@ export interface rawLeg {
 	distance: number;
 	startTime: number;
 	endTime: number;
-	mode: 'WALK' | 'BUS' | 'SUBWAY';
+	mode: 'WALK' | 'BUS' | 'SUBWAY' | 'TRAM';
 	route: string;
 	from: { name: string };
 	to: { name: string };
@@ -104,7 +104,7 @@ export interface rawRoute {
 export interface segment {
 	distance: number;
 	duration: number;
-	mode: 'walk' | 'bus' | 'mrt';
+	mode: 'walk' | 'bus' | 'mrt' | 'lrt';
 	modeIdentity: string;
 	startLocation: string;
 	endLocation: string;
