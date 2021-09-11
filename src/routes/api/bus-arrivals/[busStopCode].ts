@@ -1,19 +1,19 @@
 import { DATAMALL_KEY } from '$lib/env';
 import type {
-	bus,
-	namelessArrivals,
-	rawArrivals,
-	rawBus,
-	rawService,
-	service
-} from 'src/types/busArrivals.type';
+	rawBusArrival,
+	rawBusStopArrivals,
+	rawServiceArrivals,
+	busArrival,
+	serviceArrivals,
+	namelessBusStopArrivals
+} from '$lib/types';
 
-export async function get({ query }) {
+export async function get({ params }) {
 	// DataMall API URL
 	const dataMallUrl = 'http://datamall2.mytransport.sg/ltaodataservice/BusArrivalv2';
 
 	// Send HTTP request
-	const res = await fetch(`${dataMallUrl}?BusStopCode=${query.get('stop-code')}`, {
+	const res = await fetch(`${dataMallUrl}?BusStopCode=${params.busStopCode}`, {
 		headers: {
 			AccountKey: DATAMALL_KEY
 		}
@@ -27,10 +27,10 @@ export async function get({ query }) {
 	};
 }
 
-function formatArrivals(data: rawArrivals): namelessArrivals {
+function formatArrivals(data: rawBusStopArrivals): namelessBusStopArrivals {
 	// Some bus numbers / codes have letters as well as numbers,
 	// so here we're sorting by number first then by letter.
-	function busNumberSort(bus1: service, bus2: service) {
+	function busNumberSort(bus1: serviceArrivals, bus2: serviceArrivals) {
 		// Extract numbers from bus code
 		const number1 = bus1.number.match(/\d+/g)[0];
 		const number2 = bus2.number.match(/\d+/g)[0];
@@ -49,13 +49,13 @@ function formatArrivals(data: rawArrivals): namelessArrivals {
 		busStopCode: data.BusStopCode,
 		services: data.Services
 			// Reformat JSON data
-			.map((x) => formatService(x))
+			.map(formatService)
 			// Sort by bus number
 			.sort(busNumberSort)
 	};
 }
 
-function formatService(data: rawService): service {
+function formatService(data: rawServiceArrivals): serviceArrivals {
 	return {
 		number: data.ServiceNo,
 		arrivals: [formatBus(data.NextBus), formatBus(data.NextBus2)].filter(
@@ -64,7 +64,7 @@ function formatService(data: rawService): service {
 	};
 }
 
-function formatBus(data: rawBus): bus {
+function formatBus(data: rawBusArrival): busArrival {
 	// Data not available
 	if (!data.EstimatedArrival) {
 		return null;

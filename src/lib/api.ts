@@ -29,7 +29,7 @@ function distanceBetween(
 
 // Fetches bus arrival timings at a bus stop.
 export async function getBusArrivals(busStop: busStop): Promise<arrivals> {
-	const res = await fetch(`/api/bus-arrivals?stop-code=${busStop.code}`);
+	const res = await fetch(`/api/bus-arrivals/${busStop.code}`);
 	const data: arrivals = await res.json();
 	// OneMap doesn't provide the names of bus stops on their bus arrivals API
 	data.busStopName = busStop.name;
