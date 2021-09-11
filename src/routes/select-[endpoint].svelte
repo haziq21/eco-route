@@ -6,13 +6,10 @@
 	import { page } from '$app/stores';
 	import { getPlaces } from '$lib/api';
 	import Box from '$lib/Box.svelte';
-	import { currentPlace, destinationQuery, originQuery, routes } from '$lib/stores';
+	import { currentPlace, destinationQuery, originQuery } from '$lib/stores';
 	import type { place } from '$lib/types';
 
 	let searchResults: place[] = [];
-
-	// Clear the routes store
-	$routes = [];
 
 	// Select the active query
 	const locationQuery = $page.params.endpoint === 'destination' ? destinationQuery : originQuery;

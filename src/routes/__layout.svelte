@@ -9,7 +9,7 @@
 	import Chip from '$lib/Chip.svelte';
 	import { page } from '$app/stores';
 	import { fade, slide } from 'svelte/transition';
-	import { selectedRoute, destinationQuery, originQuery } from '$lib/stores';
+	import { selectedRoute, destinationQuery, originQuery, routes } from '$lib/stores';
 	import { writable } from 'svelte/store';
 
 	// Declaring some logic here to reduce clutter in HTML
@@ -28,6 +28,10 @@
 	} else {
 		locationChipTarget = undefined;
 	}
+
+	// Clear the routes store
+	$: if (!$page.path.includes('/suggested-routes') && !$page.path.includes('/route-details'))
+		$routes = [];
 
 	// Skip these pages when the back button is clicked
 	window.onpopstate = () => {
