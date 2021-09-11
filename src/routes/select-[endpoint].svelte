@@ -5,7 +5,7 @@
 <script lang="ts">
 	import { page } from '$app/stores';
 	import Box from '$lib/Box.svelte';
-	import { currentPlace, destinationQuery, originQuery, routes } from './_stores';
+	import { currentPlace, destinationQuery, originQuery, routes } from '$lib/stores';
 
 	async function getPlaces(search: string) {
 		const res = await fetch('/api/places?search=' + search);

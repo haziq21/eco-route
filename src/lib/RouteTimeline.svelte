@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
-	import { selectedRoute } from '../routes/_stores';
+	import { selectedRoute } from '$lib/stores';
 	import type { route } from 'src/types/directions.type';
 	import { page } from '$app/stores';
 

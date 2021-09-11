@@ -2,8 +2,7 @@
 	import Box from '$lib/Box.svelte';
 	import RouteTimeline from '$lib/RouteTimeline.svelte';
 	import type { route } from 'src/types/directions.type.js';
-	import type { place } from 'src/types/places.type';
-	import { destinationQuery, originQuery, routes } from './_stores';
+	import { destinationQuery, originQuery, routes } from '$lib/stores';
 
 	function hours(seconds: number) {
 		return Math.floor(seconds / 3600);
@@ -42,7 +41,7 @@
 				{#each response as route}
 					<RouteTimeline
 						{route}
-						longestRoute={response.reduce((a, b) => (a > (b = b.distance) ? a : b), 0)}
+						longestRoute={response.reduce((a, b) => (a > b.distance ? a : b.distance), 0)}
 					/>
 
 					<!-- How long the route takes -->

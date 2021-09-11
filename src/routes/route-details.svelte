@@ -1,6 +1,6 @@
 <script lang="ts">
 	import Box from '$lib/Box.svelte';
-	import { selectedRoute } from './_stores';
+	import { selectedRoute } from '$lib/stores';
 	import { fly } from 'svelte/transition';
 </script>
 

@@ -14,7 +14,7 @@
 	import type { busStop } from 'src/types/busStops.type';
 	import type { place } from 'src/types/places.type';
 	import { onDestroy } from 'svelte';
-	import { currentPlace, destinationQuery, originQuery } from './_stores';
+	import { currentPlace, destinationQuery, originQuery } from '$lib/stores';
 
 	onDestroy(() => clearInterval(arrivalInterval));
 
@@ -57,7 +57,7 @@
 		return Promise.all(nearbyBusStops.map(async (stop) => await getBusArrivals(stop)));
 	}
 
-	// Fetches bus arrival timings at a bus stop
+	// Fetches bus arrival timings at a bus stop.
 	async function getBusArrivals(busStop: busStop): Promise<arrivals> {
 		const res = await fetch(`/api/bus-arrivals?stop-code=${busStop.code}`);
 		const data: arrivals = await res.json();
@@ -160,8 +160,10 @@
 	<Searchbar
 		placeholder="Search for a bus number or stop"
 		bind:text={searchText}
-		on:focus={() => goto('/#box', { keepfocus: true })}
+		on:focus={() => goto('/#box', { keepfocus: true, replaceState: true })}
 	/>
+
+	<!-- Show bus arrivals if searchbox is blank -->
 	{#if !searchText}
 		{#if !$currentPlace.latitude}
 			<p>Getting current location...</p>
