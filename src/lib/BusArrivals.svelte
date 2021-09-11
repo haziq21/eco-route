@@ -1,5 +1,5 @@
 <script lang="ts">
-	import type { arrivals } from 'src/types/busArrivals.type';
+	import type { arrivals } from '$lib/types';
 	import ArrivalMarker from './ArrivalMarker.svelte';
 
 	export let arrivals: arrivals;

@@ -1,7 +1,7 @@
 <script lang="ts">
+	import type { route } from '$lib/types';
 	import { goto } from '$app/navigation';
 	import { selectedRoute } from '$lib/stores';
-	import type { route } from 'src/types/directions.type';
 	import { page } from '$app/stores';
 
 	export let route: route;

@@ -1,7 +1,7 @@
 <script lang="ts">
-	import type { arrivals, bus } from 'src/types/busArrivals.type';
+	import type { busArrival } from '$lib/types';
 
-	export let arrival: bus;
+	export let arrival: busArrival;
 </script>
 
 <span class="info">
@@ -23,7 +23,6 @@
 		/* background-color: aqua; */
 		display: grid;
 		grid-template-columns: min-content min-content;
-		/* grid-template-rows: min-content min-content; */
 		grid-template-areas: 'number icons' 'time-unit icons';
 		justify-items: center;
 
@@ -49,6 +48,5 @@
 		justify-content: center;
 		vertical-align: center;
 		grid-area: icons;
-		/* color: var(--icon-text); */
 	}
 </style>

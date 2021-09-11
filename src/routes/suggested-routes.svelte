@@ -1,7 +1,7 @@
 <script lang="ts">
 	import Box from '$lib/Box.svelte';
 	import RouteTimeline from '$lib/RouteTimeline.svelte';
-	import type { route } from 'src/types/directions.type.js';
+	import type { route } from '$lib/types';
 	import { destinationQuery, originQuery, routes } from '$lib/stores';
 
 	function hours(seconds: number) {

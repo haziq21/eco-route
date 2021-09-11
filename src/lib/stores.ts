@@ -1,5 +1,4 @@
-import type { route } from 'src/types/directions.type';
-import type { place } from 'src/types/places.type';
+import type { place, route } from '$lib/types';
 import { readable, writable } from 'svelte/store';
 import type { Writable, Readable } from 'svelte/store';
 
