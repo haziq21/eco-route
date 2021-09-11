@@ -102,7 +102,7 @@
 			{/if}
 
 			{#if showBusStop}
-				{$page.params.name} {$page.params.code}
+				{$page.params.busStopName} {$page.params.busStopCode}
 			{/if}
 		</div>
 	</div>
@@ -134,7 +134,7 @@
 
 	.back-button {
 		color: var(--overlay);
-		padding-top: 6px;
+		padding: 6px 0;
 	}
 
 	.route-layout {
