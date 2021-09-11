@@ -1,33 +1,44 @@
-<script>
-	export let icon;
-	export let redirect = undefined;
+<script lang="ts">
+	import { goto } from '$app/navigation';
+	import { getPlaceFromStorage } from './api';
+	import { destinationQuery } from './stores';
+
+	export let icon: string;
+	export let name: string;
+
+	function redirect() {
+		const place = getPlaceFromStorage(name);
+		if (place) {
+			$destinationQuery = place;
+			goto('/suggested-routes');
+		} else goto(`/set-${name}`);
+	}
 </script>
 
-<a class="chip" href={redirect}>
+<span class="chip" class:unused={!getPlaceFromStorage(name)} on:click={redirect}>
 	<span class="material-icons"> {icon} </span>
-	<span class="slot">
-		<slot />
-	</span>
-</a>
+	<slot />
+</span>
 
 <style>
-	a {
-		text-decoration: none;
-		color: unset;
-	}
 	.material-icons {
-		color: var(--input-field);
 		margin-right: var(--space-sm);
 	}
+
 	.chip {
-		/* height: min-content; */
+		display: flex;
+		flex-direction: row;
+		align-items: center;
+
 		padding: var(--space-sm) var(--space);
 		margin-right: var(--space);
 		background-color: var(--icon-text);
 		border-radius: var(--border-radius-sm);
-		/* box-shadow: var(--shadow); */
-		display: flex;
-		flex-direction: row;
-		align-items: center;
+	}
+
+	.unused {
+		color: var(--icon-text);
+		background-color: var(--background);
+		box-shadow: var(--shadow) inset;
 	}
 </style>

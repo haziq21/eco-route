@@ -1,3 +1,8 @@
+<script context="module">
+	// Value of searchbar on set-[location] page
+	export const locationChipSearch = writable('');
+</script>
+
 <script lang="ts">
 	import Searchbar from '$lib/Searchbar.svelte';
 	import RouteTimeline from '$lib/RouteTimeline.svelte';
@@ -5,6 +10,7 @@
 	import { page } from '$app/stores';
 	import { fade, slide } from 'svelte/transition';
 	import { selectedRoute, destinationQuery, originQuery } from '$lib/stores';
+	import { writable } from 'svelte/store';
 
 	// Declaring some logic here to reduce clutter in HTML
 	$: showOriginSearchbar = ['/select-origin', '/suggested-routes'].includes($page.path);
@@ -14,11 +20,24 @@
 	$: showRouteSummary = $page.path === '/route-details';
 	$: showBusStop = $page.path.includes('/bus-stop/');
 
-	// Goes to the previous page
-	function back() {
-		if ($page.path === '/suggested-routes') history.go(-2);
-		else history.back();
+	let locationChipTarget: string;
+	$: if ($page.path.includes('/set-home')) {
+		locationChipTarget = 'home';
+	} else if ($page.path.includes('/set-work')) {
+		locationChipTarget = 'work';
+	} else {
+		locationChipTarget = undefined;
 	}
+
+	// Skip these pages when the back button is clicked
+	window.onpopstate = () => {
+		if (
+			window.location.pathname.includes('/select-') ||
+			window.location.pathname.includes('/set-')
+		) {
+			history.back();
+		}
+	};
 
 	// Wraps a string in a span tag
 	function wrapInSpan(text: string | number, classes = 'number') {
@@ -67,17 +86,25 @@
 		<!-- Hide back button on homepage -->
 		{#if $page.path !== '/'}
 			<!-- Back button -->
-			<span on:click={back} class="material-icons back-button"> arrow_back_ios </span>
+			<!-- For some reason, on:click={history.back} throws 
+				'window is not defined' even when SSR is disabled-->
+			<span on:click={() => history.back()} class="material-icons back-button">
+				arrow_back_ios
+			</span>
 		{:else}
-			<!-- redirect="/ringing-alarm" because this is a fake button -->
-			<Chip icon="home" redirect="/ringing-alarm">Home</Chip>
-			<Chip icon="work">Work</Chip>
+			<Chip icon="home" name="home">Home</Chip>
+			<Chip icon="work" name="work">Work</Chip>
 		{/if}
 
 		<!-- Bus stop name -->
 		{#if showBusStop}
 			<h2>{$page.params.busStopName}</h2>
 			<span class="bus-stop-code">{$page.params.busStopCode}</span>
+		{:else if locationChipTarget}
+			<Searchbar
+				placeholder="Enter your {locationChipTarget} location"
+				bind:text={$locationChipSearch}
+			/>
 		{:else}
 			<div class="searchbar-layout">
 				<!-- Origin searchbar -->

@@ -112,3 +112,20 @@ export async function getNearbyArrivals(here: place): Promise<arrivals[]> {
 	const nearbyBusStops = await getNearbyBusStops(here);
 	return Promise.all(nearbyBusStops.map(async (stop) => await getBusArrivals(stop)));
 }
+
+// Fetches places based on a search query
+export async function getPlaces(search: string): Promise<place[]> {
+	const res = await fetch('/api/places/' + search);
+	const data = await res.json();
+
+	return data;
+}
+
+// Gets location from localStorage if available
+export function getPlaceFromStorage(storageKey: string): place | undefined {
+	const locationString = localStorage.getItem(storageKey);
+
+	if (locationString) {
+		return JSON.parse(locationString);
+	}
+}

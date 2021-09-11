@@ -4,17 +4,12 @@
 
 <script lang="ts">
 	import { page } from '$app/stores';
+	import { getPlaces } from '$lib/api';
 	import Box from '$lib/Box.svelte';
 	import { currentPlace, destinationQuery, originQuery, routes } from '$lib/stores';
+	import type { place } from '$lib/types';
 
-	async function getPlaces(search: string) {
-		const res = await fetch('/api/places/' + search);
-		const data = await res.json();
-
-		return data;
-	}
-
-	let searchResults = [];
+	let searchResults: place[] = [];
 
 	// Clear the routes store
 	$routes = [];
@@ -57,15 +52,4 @@
 		margin: 0;
 		white-space: nowrap;
 	}
-
-	/* ul::before {
-		content: '';
-		display: block;
-		position: absolute;
-		top: 0;
-		left: 0;
-		width: 100%;
-		height: 100%;
-		box-shadow: inset -14px 0 black;
-	} */
 </style>
