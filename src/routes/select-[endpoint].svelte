@@ -8,7 +8,7 @@
 	import { currentPlace, destinationQuery, originQuery, routes } from '$lib/stores';
 
 	async function getPlaces(search: string) {
-		const res = await fetch('/api/places?search=' + search);
+		const res = await fetch('/api/places/' + search);
 		const data = await res.json();
 
 		return data;

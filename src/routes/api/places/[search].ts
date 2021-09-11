@@ -1,14 +1,10 @@
 import type { place, rawPlace } from '$lib/types';
 
-export async function get({ query }: { query: URLSearchParams }): Promise<{ body: place[] }> {
-	if (!query.get('search')) {
-		return { body: [] };
-	}
+export async function get({ params }): Promise<{ body: place[] }> {
+	if (!params.search.length) return { body: [] };
 	// API url and query paramaters
 	const url = `https://developers.onemap.sg/commonapi/search`;
-	const queryParams = [`searchVal=${query.get('search')}`, 'getAddrDetails=Y', 'returnGeom=Y'].join(
-		'&'
-	);
+	const queryParams = [`searchVal=${params.search}`, 'getAddrDetails=Y', 'returnGeom=Y'].join('&');
 
 	const res = await fetch(`${url}?${queryParams}`);
 	const data = await res.json();
