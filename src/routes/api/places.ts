@@ -1,4 +1,4 @@
-import type { place, rawPlace, rawPlacesRoot } from 'src/types/places.type';
+import type { place, rawPlace } from '$lib/types';
 
 export async function get({ query }: { query: URLSearchParams }): Promise<{ body: place[] }> {
 	if (!query.get('search')) {
@@ -11,7 +11,7 @@ export async function get({ query }: { query: URLSearchParams }): Promise<{ body
 	);
 
 	const res = await fetch(`${url}?${queryParams}`);
-	const data: rawPlacesRoot = await res.json();
+	const data = await res.json();
 
 	return {
 		body: uniq(data.results.map(formatPlace))

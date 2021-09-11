@@ -1,5 +1,5 @@
 import { ONEMAP_CREDENTIALS } from '$lib/env';
-import type { rawLeg, rawRoute, route, segment } from 'src/types/directions.type';
+import type { rawLeg, rawRoute, route, segment } from '$lib/types';
 
 async function getOneMapToken() {
 	// Token retrieval API URL
@@ -75,7 +75,6 @@ function formatRoute(data: rawRoute): route {
 		distance: segments.reduce((a, b) => a + b.distance, 0),
 		duration: data.duration,
 		walkTime: data.walkTime,
-		leaveTime: data.startTime,
 		arriveTime: data.endTime,
 		segments
 	};

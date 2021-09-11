@@ -1,5 +1,5 @@
 import { DATAMALL_KEY } from '$lib/env';
-import type { busStop, rawBusStop } from 'src/types/busStops.type';
+import type { busStop, rawBusStop } from '$lib/types';
 
 export async function get(): Promise<{ body: busStop[] }> {
 	return {

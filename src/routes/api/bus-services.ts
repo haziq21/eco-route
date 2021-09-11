@@ -1,8 +1,9 @@
 import { DATAMALL_KEY } from '$lib/env';
-import type { rawService, service } from 'src/types/busServices.type';
+import type { rawService, service } from '$lib/types';
 
 export async function get(): Promise<{ body: service[] }> {
 	const services = await fetchData();
+	// Remove duplicates in services
 	const formattedServices = [...new Set(services.map(formatService))];
 
 	return {
