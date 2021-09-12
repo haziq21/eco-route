@@ -76,7 +76,9 @@
 		<ul>
 			{#each searchResults.services as service}
 				<li>
-					<a href="/bus-service/{service.number}">{service.number}</a>
+					<a href="/bus-service/{service.number}/{service.origin}-{service.destination}">
+						{service.number}
+					</a>
 				</li>
 			{/each}
 		</ul>

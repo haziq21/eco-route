@@ -11,6 +11,7 @@
 	import { fade, slide } from 'svelte/transition';
 	import { selectedRoute, destinationQuery, originQuery, routes } from '$lib/stores';
 	import { writable } from 'svelte/store';
+	import { getBusStop } from '$lib/api';
 
 	// Declaring some logic here to reduce clutter in HTML
 	$: showOriginSearchbar = ['/select-origin', '/suggested-routes'].includes($page.path);
@@ -19,6 +20,11 @@
 	);
 	$: showRouteSummary = $page.path === '/route-details';
 	$: showBusStop = $page.path.includes('/bus-stop/');
+	$: showBusService = $page.path.includes('/bus-service/');
+
+	let serviceIsLoopService: boolean;
+	$: if ($page.path.includes('/bus-service/'))
+		serviceIsLoopService = $page.params.originCode === $page.params.destinationCode;
 
 	let locationChipTarget: string;
 	$: if ($page.path.includes('/set-home')) {
@@ -100,45 +106,66 @@
 			<Chip icon="work" name="work">Work</Chip>
 		{/if}
 
-		<!-- Bus stop name -->
-		{#if showBusStop}
-			<h2>{$page.params.busStopName}</h2>
-			<span class="bus-stop-code">{$page.params.busStopCode}</span>
-		{:else if locationChipTarget}
-			<Searchbar
-				placeholder="Enter your {locationChipTarget} location"
-				bind:text={$locationChipSearch}
-			/>
-		{:else}
-			<div class="searchbar-layout">
-				<!-- Origin searchbar -->
-				{#if showOriginSearchbar}
-					<Searchbar
-						placeholder="Enter your origin"
-						bind:text={$originQuery.name}
-						redirect="select-origin"
-					/>
-				{/if}
+		<div class="searchbar-layout">
+			<!-- Bus service page -->
+			{#if showBusService}
+				<h2>{$page.params.busNumber}</h2>
+				<span class="bus-stop-code">
+					{#await getBusStop($page.params.originCode) then stop}
+						{stop.name}
+					{/await}
+					{#if !serviceIsLoopService}
+						{#await getBusStop($page.params.destinationCode) then stop}
+							to
+							{stop.name}
+						{/await}
+					{:else}
+						(loop service)
+					{/if}
+				</span>
+			{/if}
 
-				<!-- Destination searchbar -->
-				{#if showDestinationSearchbar}
-					<Searchbar
-						placeholder={$page.path === '/' ? 'Search' : 'Enter your destination'}
-						bind:text={$destinationQuery.name}
-						redirect="select-destination"
-					/>
-				{/if}
+			<!-- Bus stop page -->
+			{#if showBusStop}
+				<h2>{$page.params.busStopName}</h2>
+				<span class="bus-stop-code">{$page.params.busStopCode}</span>
+			{/if}
 
-				<!-- Route summary bar -->
-				{#if showRouteSummary}
-					<RouteTimeline route={$selectedRoute} />
-					<div class="route-layout">
-						{@html getArriveTimeHTML($selectedRoute)}
-						{@html getDurationHTML($selectedRoute)}
-					</div>
-				{/if}
-			</div>
-		{/if}
+			<!-- Set 'quick destination' searchbar -->
+			{#if locationChipTarget}
+				<Searchbar
+					placeholder="Enter your {locationChipTarget} location"
+					bind:text={$locationChipSearch}
+				/>
+			{/if}
+
+			<!-- Origin searchbar -->
+			{#if showOriginSearchbar}
+				<Searchbar
+					placeholder="Enter your origin"
+					bind:text={$originQuery.name}
+					redirect="select-origin"
+				/>
+			{/if}
+
+			<!-- Destination searchbar -->
+			{#if showDestinationSearchbar}
+				<Searchbar
+					placeholder={$page.path === '/' ? 'Search' : 'Enter your destination'}
+					bind:text={$destinationQuery.name}
+					redirect="select-destination"
+				/>
+			{/if}
+
+			<!-- Route summary bar -->
+			{#if showRouteSummary}
+				<RouteTimeline route={$selectedRoute} />
+				<div class="route-layout">
+					{@html getArriveTimeHTML($selectedRoute)}
+					{@html getDurationHTML($selectedRoute)}
+				</div>
+			{/if}
+		</div>
 	</div>
 </div>
 
@@ -152,9 +179,6 @@
 	}
 
 	.bus-stop-code {
-		display: flex;
-		align-items: center;
-		margin-left: var(--space);
 		color: var(--icon-text);
 		font-size: 0.9rem;
 		font-weight: bold;
