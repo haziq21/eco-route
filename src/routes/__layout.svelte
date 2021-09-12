@@ -1,4 +1,5 @@
 <script context="module">
+	export const ssr = false;
 	// Value of searchbar on set-[location] page
 	export const locationChipSearch = writable('');
 </script>
