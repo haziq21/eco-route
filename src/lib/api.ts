@@ -36,7 +36,8 @@ export async function getBusArrivals(busStop: busStop): Promise<arrivals> {
 	return data;
 }
 
-// Fetches all bus stops
+// Fetches all bus stops.
+// This is slow and everything that uses this is also slow.
 async function getAllBusStops(): Promise<busStop[]> {
 	const res = await fetch('/api/bus-stops');
 	const data = await res.json();
@@ -128,4 +129,21 @@ export function getPlaceFromStorage(storageKey: string): place | undefined {
 	if (locationString) {
 		return JSON.parse(locationString);
 	}
+}
+
+// Gets a bus route for a given bus service
+export async function getBusRoute(busService: string): Promise<busStop[]> {
+	// I know this is slow and ineffecient
+	const busStops = await getAllBusStops();
+	const res = await fetch(`/api/bus-routes/${busService}`);
+	const data: string[] = await res.json();
+
+	const route = new Array(data.length);
+	const relevantStops = busStops.filter((busStop) => data.includes(busStop.code));
+
+	for (let i = 0; i < data.length; i++) {
+		route[i] = relevantStops.find((stop) => stop.code === data[i]);
+	}
+
+	return route;
 }
