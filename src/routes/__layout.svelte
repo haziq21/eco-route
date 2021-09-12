@@ -49,6 +49,12 @@
 		}
 	};
 
+	// Go back to the previous page
+	function back() {
+		history.back();
+		$locationChipSearch = '';
+	}
+
 	// Wraps a string in a span tag
 	function wrapInSpan(text: string | number, classes = 'number') {
 		return `<span class="${classes}">${text}</span>`;
@@ -98,9 +104,7 @@
 			<!-- Back button -->
 			<!-- For some reason, on:click={history.back} throws 
 				'window is not defined' even when SSR is disabled-->
-			<span on:click={() => history.back()} class="material-icons back-button">
-				arrow_back_ios
-			</span>
+			<span on:click={back} class="material-icons back-button"> arrow_back_ios </span>
 		{:else}
 			<Chip icon="home" name="home">Home</Chip>
 			<Chip icon="work" name="work">Work</Chip>
@@ -137,6 +141,8 @@
 					placeholder="Enter your {locationChipTarget} location"
 					bind:text={$locationChipSearch}
 				/>
+
+				<!-- {$locationChipSearch} -->
 			{/if}
 
 			<!-- Origin searchbar -->

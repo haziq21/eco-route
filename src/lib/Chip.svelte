@@ -5,6 +5,15 @@
 
 	export let icon: string;
 	export let name: string;
+	let pressTimer;
+
+	function startLongPress() {
+		pressTimer = setTimeout(() => goto(`/set-${name}`), 1000);
+	}
+
+	function endLongPress() {
+		clearTimeout(pressTimer);
+	}
 
 	function redirect() {
 		const place = getPlaceFromStorage(name);
@@ -15,7 +24,13 @@
 	}
 </script>
 
-<span class="chip" class:unused={!getPlaceFromStorage(name)} on:click={redirect}>
+<span
+	class="chip"
+	class:unused={!getPlaceFromStorage(name)}
+	on:click={redirect}
+	on:mousedown={startLongPress}
+	on:mouseup={endLongPress}
+>
 	<span class="material-icons"> {icon} </span>
 	<slot />
 </span>
