@@ -28,8 +28,6 @@
 	class="chip"
 	class:unused={!getPlaceFromStorage(name)}
 	on:click={redirect}
-	on:mousedown={startLongPress}
-	on:mouseup={endLongPress}
 	on:pointerdown={startLongPress}
 	on:pointerup={endLongPress}
 >
