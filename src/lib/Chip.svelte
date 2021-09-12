@@ -30,6 +30,8 @@
 	on:click={redirect}
 	on:mousedown={startLongPress}
 	on:mouseup={endLongPress}
+	on:pointerdown={startLongPress}
+	on:pointerup={endLongPress}
 >
 	<span class="material-icons"> {icon} </span>
 	<slot />
