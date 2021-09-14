@@ -3,9 +3,12 @@
 	import ArrivalMarker from './ArrivalMarker.svelte';
 
 	export let arrivals: arrivals;
+	export let showHeader = true;
 </script>
 
-<h3>{arrivals.busStopName}</h3>
+{#if showHeader}
+	<h3>{arrivals.busStopName}</h3>
+{/if}
 <div class="bus-stop">
 	{#each arrivals.services as service}
 		<!-- Bus number -->

@@ -84,6 +84,7 @@ body::-webkit-scrollbar {
 /* Remove default link underline */
 a {
 	text-decoration: none;
+	color: unset;
 }
 
 h1 {

@@ -34,6 +34,7 @@
 	}
 
 	.info.arr {
+		justify-items: center;
 		grid-template-areas: 'number icons' 'number icons';
 	}
 

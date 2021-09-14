@@ -15,6 +15,6 @@
 	{#if !arrivals}
 		<p>Loading bus arrivals...</p>
 	{:else}
-		<BusArrivals {arrivals} />
+		<BusArrivals {arrivals} showHeader={false} />
 	{/if}
 </Box>

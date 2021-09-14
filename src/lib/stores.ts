@@ -4,8 +4,8 @@ import type { Writable, Readable } from 'svelte/store';
 
 // Readable store for current location of user
 export const currentPlace: Readable<place> = readable({ name: 'Current location' }, (set) => {
-	// Update currentPlace when coordinates changed
 	if (navigator.geolocation) {
+		// Update currentPlace when coordinates changed
 		const id = navigator.geolocation.watchPosition((position) => {
 			set({
 				name: 'Current location',
