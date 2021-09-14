@@ -4,11 +4,15 @@
 	export let arrival: busArrival;
 </script>
 
-<span class="info">
+<span class="info" class:arr={!arrival.minutesToArrival}>
 	<span class="number">
-		{arrival.minutesToArrival}
+		{arrival.minutesToArrival ? arrival.minutesToArrival : 'Arr'}
 	</span>
-	<span class="time-unit">min</span>
+
+	{#if arrival.minutesToArrival}
+		<span class="time-unit">min</span>
+	{/if}
+
 	<span class="icons">
 		<span class="material-icons">
 			{{ SEA: 'person', SDA: 'group', LSD: 'groups' }[arrival.occupancy]}
@@ -29,9 +33,13 @@
 		gap: 0 var(--space-sm);
 	}
 
+	.info.arr {
+		grid-template-areas: 'number icons' 'number icons';
+	}
+
 	.number {
 		display: flex;
-		align-items: flex-end;
+		align-items: center;
 		grid-area: number;
 		font-weight: bolder;
 		font-size: 1.3rem;
