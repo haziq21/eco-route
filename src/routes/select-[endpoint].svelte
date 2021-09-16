@@ -14,10 +14,12 @@
 	// Select the active query
 	const locationQuery = $page.params.endpoint === 'destination' ? destinationQuery : originQuery;
 	const oppositeQuery = $page.params.endpoint === 'destination' ? originQuery : destinationQuery;
-	$: getPlaces($locationQuery.name).then((result) => (searchResults = result));
+	$: if ($locationQuery.name)
+		getPlaces($locationQuery.name).then((result) => (searchResults = result));
 
 	$: if (
-		$oppositeQuery.name !== 'Current location' &&
+		$currentPlace.hasPermission &&
+		$oppositeQuery.name !== $currentPlace.name &&
 		!$locationQuery.name &&
 		(!searchResults.length || searchResults[0].name !== 'Current location')
 	) {
@@ -26,8 +28,8 @@
 </script>
 
 <Box>
-	{#if $locationQuery.name}
-		<ul>
+	<ul>
+		{#if $locationQuery.name}
 			{#each searchResults as location}
 				<li on:click={() => ($locationQuery = location)}>
 					<a href="/suggested-routes">{location.name}</a>
@@ -35,10 +37,14 @@
 			{:else}
 				"{$locationQuery.name}" not found
 			{/each}
-		</ul>
-	{:else}
-		type a location to search
-	{/if}
+		{:else if $oppositeQuery.name !== $currentPlace.name}
+			<li on:click={() => ($locationQuery = $currentPlace)}>
+				<a href="/suggested-routes">{$currentPlace.name}</a>
+			</li>
+		{:else}
+			enter a location to search
+		{/if}
+	</ul>
 </Box>
 
 <style>

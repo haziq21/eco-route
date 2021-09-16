@@ -138,3 +138,9 @@ export interface place {
 	longitude: number;
 	latitude: number;
 }
+
+// User's current location
+export interface userLocation extends place {
+	name: 'Current location';
+	hasPermission: boolean;
+}

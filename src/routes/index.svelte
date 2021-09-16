@@ -13,10 +13,18 @@
 	import { searchBusStops, searchBusses, getNearbyArrivals } from '$lib/api';
 	import type { busStop, service, arrivals } from '$lib/types';
 
+	let arrivalInterval: NodeJS.Timeout;
 	onDestroy(() => clearInterval(arrivalInterval));
 
 	// Content of bus number / bus stop searchbar
 	let searchText: string;
+
+	// Search results
+	let searchResults: { stops: busStop[]; services: service[] } = { stops: [], services: [] };
+	$: if (searchText) {
+		searchBusStops(searchText).then((res) => (searchResults.stops = res));
+		searchBusses(searchText).then((res) => (searchResults.services = res));
+	}
 
 	// Clear destination query when user goes back to home page
 	$destinationQuery = {
@@ -26,27 +34,22 @@
 		latitude: null
 	};
 
-	// Reset origin query to user's current location when they go back to home page
-	$: $originQuery = $currentPlace;
-
-	// Search results
-	let searchResults: { stops: busStop[]; services: service[] } = { stops: [], services: [] };
-	$: if (searchText) {
-		searchBusStops(searchText).then((res) => (searchResults.stops = res));
-		searchBusses(searchText).then((res) => (searchResults.services = res));
-	}
-
 	let nearbyArrivals: arrivals[];
 
-	// Get nearby arrivals immediately instead of waiting for setInterval.
-	// Reactive declaration so that it updates when $currentPlace is finally fetched.
-	// (there is some geolocation delay when the app loads)
-	$: getNearbyArrivals($currentPlace).then((res) => (nearbyArrivals = res));
+	$: if ($currentPlace.hasPermission) {
+		// Reset origin query to user's current location when they go back to home page
+		$originQuery = $currentPlace;
 
-	// Update arrivals every 30 seconds
-	let arrivalInterval = setInterval(() => {
+		// Get nearby arrivals immediately instead of waiting for setInterval.
 		getNearbyArrivals($currentPlace).then((res) => (nearbyArrivals = res));
-	}, 30000);
+
+		// Update arrivals every 30 seconds
+		arrivalInterval = setInterval(() => {
+			getNearbyArrivals($currentPlace).then((res) => (nearbyArrivals = res));
+		}, 30000);
+	} else {
+		clearInterval(arrivalInterval);
+	}
 </script>
 
 <Box>
@@ -59,38 +62,42 @@
 
 	<!-- Show bus arrivals if searchbox is blank -->
 	{#if !searchText}
-		{#if !$currentPlace.latitude}
+		<!-- User needs to explicitly allow location permission -->
+		{#if !$currentPlace.hasPermission}
+			<p class="location-permission">Enable location permissions to show nearby bus stops</p>
+		{:else if !$currentPlace.latitude}
 			<p>Getting current location...</p>
-		{:else if nearbyArrivals}
+		{:else if !nearbyArrivals}
+			<p>Loading bus arrivals...</p>
+		{:else}
 			{#each nearbyArrivals as busStop}
 				<BusArrivals arrivals={busStop} />
 			{/each}
-		{:else}
-			<p>Loading bus arrivals...</p>
 		{/if}
 	{:else}
 		<!-- Bus service search results -->
 		{#if searchResults.services.length}
-			<p>Bus services</p>
+			<h3>Bus services</h3>
 		{/if}
-		<ul>
+		<div>
 			{#each searchResults.services as service}
-				<li>
-					<a href="/bus-service/{service.number}/{service.origin}-{service.destination}">
-						{service.number}
-					</a>
-				</li>
+				<a href="/bus-service/{service.number}/{service.origin}-{service.destination}">
+					{service.number}
+				</a>
 			{/each}
-		</ul>
+		</div>
 
 		<!-- Bus stop search results -->
 		{#if searchResults.stops.length}
-			<p>Bus stops</p>
+			<h3>Bus stops</h3>
 		{/if}
 		<ul>
 			{#each searchResults.stops as busStop}
 				<li>
-					<a href="/bus-stop/{busStop.code}/{busStop.name}">{busStop.name} {busStop.code}</a>
+					<a href="/bus-stop/{busStop.code}/{busStop.name}">
+						<span class="bus-stop-code">{busStop.code}</span>
+						{busStop.name}
+					</a>
 				</li>
 			{/each}
 		</ul>
@@ -103,9 +110,29 @@
 </Box>
 
 <style>
+	.location-permission {
+		margin: 30px auto;
+		text-align: center;
+		color: rgb(117, 175, 135);
+		font-size: 0.8rem;
+	}
+
 	ul {
 		list-style: none;
 		margin: 0;
 		padding: 0;
+	}
+
+	li {
+		margin: var(--space-sm) auto;
+	}
+
+	h3 {
+		margin-bottom: var(--space-md);
+	}
+
+	.bus-stop-code {
+		/* color: var(--background); */
+		font-weight: bold;
 	}
 </style>
