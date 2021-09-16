@@ -1,9 +1,5 @@
 .DS_Store
 node_modules
 /.svelte-kit
-/package
-/public
-.firebase
-src/routes/api/_config.js
 .vercel
 .env
