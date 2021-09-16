@@ -12,6 +12,7 @@
 	import { destinationQuery, originQuery, routes } from '$lib/stores';
 	import { writable } from 'svelte/store';
 	import { getBusStop, getDurationHTML, getArriveTimeHTML, uncompressJSON } from '$lib/utilities';
+	import type { route } from '$lib/types';
 
 	// Declaring some logic here to reduce clutter in HTML
 	$: showOriginSearchbar = ['/select-origin', '/suggested-routes'].includes($page.path);
@@ -35,7 +36,9 @@
 		locationChipTarget = undefined;
 	}
 
-	$: selectedRoute = uncompressJSON($page.params.route);
+	let selectedRoute: route;
+	$: if ($page.params.route) selectedRoute = uncompressJSON($page.params.route);
+
 	// Clear the routes store
 	$: if (!$page.path.includes('/suggested-routes') && !$page.path.includes('/route-details'))
 		$routes = [];
