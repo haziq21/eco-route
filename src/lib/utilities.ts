@@ -1,13 +1,16 @@
-/* This module provides utility functions for the APIs */
+/* This module provides utility functions for convenience */
 
-import type { arrivals, service, busStop, place } from '$lib/types';
+import JSONCrush from '$lib/JSONCrush';
+import type { arrivals, service, busStop, place, route } from '$lib/types';
 
-// Converts degrees to radians
+// Helper functions to interface with the APIs
+
+/** Converts degrees to radians */
 function toRad(degrees: number) {
 	return degrees * (Math.PI / 180);
 }
 
-// Gets distance between two latitude-longitude points in km (using the Haversine formula)
+/** Gets distance between two latitude-longitude points in km (using the Haversine formula) */
 // From https://stackoverflow.com/a/27943
 function distanceBetween(
 	{ latitude: lat1, longitude: lon1 },
@@ -27,7 +30,7 @@ function distanceBetween(
 	return R * c;
 }
 
-// Fetches bus arrival timings at a bus stop.
+/** Fetches bus arrival timings at a bus stop */
 export async function getBusArrivals(busStop: busStop): Promise<arrivals> {
 	const res = await fetch(`/api/bus-arrivals/${busStop.code}`);
 	const data: arrivals = await res.json();
@@ -36,7 +39,7 @@ export async function getBusArrivals(busStop: busStop): Promise<arrivals> {
 	return data;
 }
 
-// Fetches all bus stops.
+/** Fetches all bus stops */
 // This is slow and everything that uses this is also slow.
 async function getAllBusStops(): Promise<busStop[]> {
 	const res = await fetch('/api/bus-stops');
@@ -45,13 +48,13 @@ async function getAllBusStops(): Promise<busStop[]> {
 	return data;
 }
 
-// Fetches a bus stop from its bus stop code
+/** Fetches a bus stop from its bus stop code */
 export async function getBusStop(code: string): Promise<busStop> {
 	const data = await getAllBusStops();
 	return data.find((busStop) => busStop.code === code);
 }
 
-// Searches for bus stops by name or code
+/** Searches for bus stops by name or code */
 export async function searchBusStops(query: string): Promise<busStop[]> {
 	// Case-insensitive keyword search
 	const queries = query
@@ -82,7 +85,7 @@ export async function searchBusStops(query: string): Promise<busStop[]> {
 		.map((stop) => stop.stop);
 }
 
-// Search for bus services by bus number
+/** Search for bus services by bus number */
 export async function searchBusses(query: string): Promise<service[]> {
 	const res = await fetch('/api/bus-services');
 	const data: service[] = await res.json();
@@ -91,7 +94,7 @@ export async function searchBusses(query: string): Promise<service[]> {
 	return data.filter((service) => service.number.includes(query)).slice(0, 11);
 }
 
-// Fetches bus stops within 500 metres of user
+/** Fetches bus stops within 500 metres of user */
 async function getNearbyBusStops(here: place) {
 	const data = await getAllBusStops();
 	const nearbyStops: { distance: number; stop: busStop }[] = [];
@@ -108,13 +111,13 @@ async function getNearbyBusStops(here: place) {
 		.map((stop) => stop.stop);
 }
 
-// Fetches bus arrivals at bus stops nearby
+/** Fetches bus arrivals at bus stops nearby */
 export async function getNearbyArrivals(here: place): Promise<arrivals[]> {
 	const nearbyBusStops = await getNearbyBusStops(here);
 	return Promise.all(nearbyBusStops.map(async (stop) => await getBusArrivals(stop)));
 }
 
-// Fetches places based on a search query
+/** Fetches places based on a search query */
 export async function getPlaces(search: string): Promise<place[]> {
 	const res = await fetch('/api/places/' + search);
 	const data = await res.json();
@@ -122,16 +125,7 @@ export async function getPlaces(search: string): Promise<place[]> {
 	return data;
 }
 
-// Gets location from localStorage if available
-export function getPlaceFromStorage(storageKey: string): place | undefined {
-	const locationString = localStorage.getItem(storageKey);
-
-	if (locationString) {
-		return JSON.parse(locationString);
-	}
-}
-
-// Gets a bus route for a given bus service
+/** Gets a bus route for a given bus service */
 export async function getBusRoute(busService: string): Promise<busStop[]> {
 	// I know this is slow and ineffecient
 	const busStops = await getAllBusStops();
@@ -146,4 +140,58 @@ export async function getBusRoute(busService: string): Promise<busStop[]> {
 	}
 
 	return route;
+}
+
+/** Gets a place from localStorage if available */
+export function getPlaceFromStorage(storageKey: string): place | undefined {
+	const locationString = localStorage.getItem(storageKey);
+
+	if (locationString) {
+		return JSON.parse(locationString);
+	}
+}
+
+// Helper functions to convert JSON objects into URL-friendly strings
+
+/** Compresses an object into a string */
+export function compressJSON(data: Record<string, unknown>): string {
+	return encodeURIComponent(JSONCrush.crush(JSON.stringify(data)));
+}
+
+/** Uncompresses a string into an object */
+export function uncompressJSON(data: string): Record<string, unknown> {
+	return JSON.parse(decodeURIComponent(JSONCrush.uncrush(data)));
+}
+
+// Helper functions to generate templated HTML, meant to be used with {@html ...}
+
+/** Wraps a string in a span tag */
+export function wrapInSpan(text: string | number, classes = 'number'): string {
+	return `<span class="${classes}">${text}</span>`;
+}
+
+/** Gets HTML for the arrival time of a route */
+export function getArriveTimeHTML({ arriveTime }: route): string {
+	const timeString = new Date(arriveTime).toLocaleString('en', {
+		hour: 'numeric',
+		minute: 'numeric'
+	});
+	const timeHTML = 'Leave now, arrive at ' + wrapInSpan(timeString);
+
+	return wrapInSpan(timeHTML, 'extra');
+}
+
+/** Gets HTML for the duration of a route */
+export function getDurationHTML({ duration }: route): string {
+	const hours = Math.floor(duration / 3600);
+	const minutes = Math.floor((duration - hours * 3600) / 60);
+
+	if (hours || minutes) {
+		const hourString = hours ? wrapInSpan(hours) + ' hr' : '';
+		const minuteString = minutes ? wrapInSpan(minutes) + ' min' : '';
+
+		return wrapInSpan(`${hourString} ${minuteString}`, 'time');
+	} else {
+		return wrapInSpan('Instant', 'time'); // Just in case...
+	}
 }
