@@ -9,7 +9,7 @@
 	import Chip from '$lib/Chip.svelte';
 	import { page } from '$app/stores';
 	import { fade, slide } from 'svelte/transition';
-	import { selectedRoute, destinationQuery, originQuery, routes } from '$lib/stores';
+	import { destinationQuery, originQuery, routes } from '$lib/stores';
 	import { writable } from 'svelte/store';
 	import { getBusStop, getDurationHTML, getArriveTimeHTML, uncompressJSON } from '$lib/utilities';
 
@@ -35,6 +35,7 @@
 		locationChipTarget = undefined;
 	}
 
+	$: selectedRoute = uncompressJSON($page.params.route);
 	// Clear the routes store
 	$: if (!$page.path.includes('/suggested-routes') && !$page.path.includes('/route-details'))
 		$routes = [];
@@ -134,10 +135,10 @@
 
 			<!-- Route summary bar -->
 			{#if showRouteSummary}
-				<RouteTimeline route={uncompressJSON($page.params.route)} />
+				<RouteTimeline route={selectedRoute} />
 				<div class="route-layout">
-					{@html getArriveTimeHTML($selectedRoute)}
-					{@html getDurationHTML($selectedRoute)}
+					{@html getArriveTimeHTML(selectedRoute)}
+					{@html getDurationHTML(selectedRoute)}
 				</div>
 			{/if}
 		</div>
