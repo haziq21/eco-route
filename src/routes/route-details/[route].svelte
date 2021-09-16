@@ -1,12 +1,16 @@
 <script lang="ts">
+	import { page } from '$app/stores';
 	import Box from '$lib/Box.svelte';
-	import { selectedRoute } from '$lib/stores';
+	import { uncompressJSON } from '$lib/utilities';
 	import { fly } from 'svelte/transition';
+	import type { route } from '$lib/types';
+
+	let route: route = uncompressJSON($page.params.route);
 </script>
 
 <Box>
 	<div class="timeline">
-		{#each $selectedRoute.segments as segment}
+		{#each route.segments as segment}
 			<div class="place">
 				<span>{segment.startLocation}</span>
 			</div>
@@ -15,9 +19,9 @@
 					{#if segment.mode === 'walk'}
 						Walk for {Math.round(segment.distance)} metres
 					{:else}
-						<span class="mode-label {segment.mode} {segment.modeIdentity}"
-							>{segment.modeIdentity}</span
-						>
+						<span class="mode-label {segment.mode} {segment.modeIdentity}">
+							{segment.modeIdentity}
+						</span>
 						for {segment.intermediateStops} stops
 					{/if}
 					({Math.round(segment.duration / 60)} min)

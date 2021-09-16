@@ -1,5 +1,4 @@
 <script context="module">
-	export const ssr = false;
 	// Value of searchbar on set-[location] page
 	export const locationChipSearch = writable('');
 </script>
@@ -12,14 +11,14 @@
 	import { fade, slide } from 'svelte/transition';
 	import { selectedRoute, destinationQuery, originQuery, routes } from '$lib/stores';
 	import { writable } from 'svelte/store';
-	import { getBusStop } from '$lib/api';
+	import { getBusStop, getDurationHTML, getArriveTimeHTML, uncompressJSON } from '$lib/utilities';
 
 	// Declaring some logic here to reduce clutter in HTML
 	$: showOriginSearchbar = ['/select-origin', '/suggested-routes'].includes($page.path);
 	$: showDestinationSearchbar = ['/', '/select-destination', '/suggested-routes'].includes(
 		$page.path
 	);
-	$: showRouteSummary = $page.path === '/route-details';
+	$: showRouteSummary = $page.path.includes('/route-details/');
 	$: showBusStop = $page.path.includes('/bus-stop/');
 	$: showBusService = $page.path.includes('/bus-service/');
 
@@ -54,37 +53,6 @@
 	function back() {
 		history.back();
 		$locationChipSearch = '';
-	}
-
-	// Wraps a string in a span tag
-	function wrapInSpan(text: string | number, classes = 'number') {
-		return `<span class="${classes}">${text}</span>`;
-	}
-
-	// Gets HTML of the arrival time of a route
-	function getArriveTimeHTML({ arriveTime }) {
-		const timeString = new Date(arriveTime).toLocaleString('en', {
-			hour: 'numeric',
-			minute: 'numeric'
-		});
-		const timeHTML = 'Leave now, arrive at ' + wrapInSpan(timeString);
-
-		return wrapInSpan(timeHTML, 'extra');
-	}
-
-	// Gets HTML of the duration of a route
-	function getDurationHTML({ duration }) {
-		const hours = Math.floor(duration / 3600);
-		const minutes = Math.floor((duration - hours * 3600) / 60);
-
-		if (hours || minutes) {
-			let hourString = hours ? wrapInSpan(hours) + ' hr' : '';
-			let minuteString = minutes ? wrapInSpan(minutes) + ' min' : '';
-
-			return wrapInSpan(`${hourString} ${minuteString}`, 'time');
-		} else {
-			return wrapInSpan('Instant', 'time'); // Just in case...
-		}
 	}
 </script>
 
@@ -166,7 +134,7 @@
 
 			<!-- Route summary bar -->
 			{#if showRouteSummary}
-				<RouteTimeline route={$selectedRoute} />
+				<RouteTimeline route={uncompressJSON($page.params.route)} />
 				<div class="route-layout">
 					{@html getArriveTimeHTML($selectedRoute)}
 					{@html getDurationHTML($selectedRoute)}
@@ -227,16 +195,16 @@
 		margin-bottom: -5px;
 	}
 
-	/* :global() to select the span.number inside {@html ...} tags */
-	:global(.number) {
+	/* :global() to select elements inside {@html ...} tags */
+	.searchbar-layout :global(.number) {
 		font-weight: bolder;
 	}
 
-	:global(.time) {
+	.searchbar-layout :global(.time) {
 		font-size: 1.2rem;
 	}
 
-	:global(.extra) {
+	.searchbar-layout :global(.extra) {
 		font-size: 0.9rem;
 	}
 </style>

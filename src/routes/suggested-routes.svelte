@@ -3,14 +3,7 @@
 	import RouteTimeline from '$lib/RouteTimeline.svelte';
 	import type { route } from '$lib/types';
 	import { destinationQuery, originQuery, routes } from '$lib/stores';
-
-	function hours(seconds: number) {
-		return Math.floor(seconds / 3600);
-	}
-
-	function minutes(seconds: number) {
-		return Math.floor((seconds - hours(seconds) * 3600) / 60);
-	}
+	import { getArriveTimeHTML, getDurationHTML } from '$lib/utilities';
 
 	async function getDirections(
 		{ latitude: fromLat, longitude: fromLon },
@@ -35,7 +28,7 @@
 <Box>
 	{#if $originQuery.name && $destinationQuery.name}
 		{#await directions}
-			loading...
+			Calculating directions...
 		{:then response}
 			<div class="timelines">
 				{#each response as route}
@@ -43,32 +36,14 @@
 						{route}
 						longestRoute={response.reduce((a, b) => (a > b.distance ? a : b.distance), 0)}
 					/>
-
 					<!-- How long the route takes -->
-					<span class="time">
-						{#if hours(route.duration)}
-							<span class="number">{hours(route.duration)}</span>
-							hr
-						{/if}
-						<span class="number">{minutes(route.duration)}</span>
-						min
-					</span>
-
+					{@html getDurationHTML(route)}
 					<!-- Extra information like walking and arrival time -->
-					<span class="extra">
-						Leave now, arrive at
-						<span class="number"
-							>{new Date(route.arriveTime).toLocaleString('en', {
-								hour: 'numeric',
-								minute: 'numeric'
-							})}</span
-						>.
-						<span class="number">{Math.round(route.walkTime / 60)}</span> min walking time.
-					</span>
+					{@html getArriveTimeHTML(route)}
 				{/each}
 			</div>
 		{:catch error}
-			Error: {error.message}
+			An error has occurred, please try again.
 		{/await}
 	{:else}
 		enter location to search
@@ -76,12 +51,6 @@
 </Box>
 
 <style>
-	.extra {
-		font-size: 0.8rem;
-		grid-column: 1 / 3;
-		margin: 3px 0 var(--space) 0;
-	}
-
 	.timelines {
 		display: grid;
 		column-gap: var(--space);
@@ -90,12 +59,19 @@
 		align-items: center;
 	}
 
-	.time {
+	/* :global() to select elements inside {@html ...} tags */
+	.timelines :global(.extra) {
+		font-size: 0.8rem;
+		grid-column: 1 / 3;
+		margin: 3px 0 var(--space) 0;
+	}
+
+	.timelines :global(.time) {
 		font-size: 1.1rem;
 		text-align: right;
 	}
 
-	.number {
+	.timelines :global(.number) {
 		font-weight: bolder;
 	}
 </style>

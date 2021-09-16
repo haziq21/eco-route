@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { page } from '$app/stores';
-	import { getBusStop, getBusArrivals } from '$lib/api';
+	import { getBusStop, getBusArrivals } from '$lib/utilities';
 	import Box from '$lib/Box.svelte';
 	import BusArrivals from '$lib/BusArrivals.svelte';
 	import type { arrivals } from '$lib/types';

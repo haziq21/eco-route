@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
-	import { getPlaceFromStorage } from './api';
+	import { getPlaceFromStorage } from '$lib/utilities';
 	import { destinationQuery } from './stores';
 
 	export let icon: string;

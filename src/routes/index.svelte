@@ -1,8 +1,3 @@
-<script context="module">
-	// This component needs to access navigator (client-side)
-	export const ssr = false;
-</script>
-
 <script lang="ts">
 	import { goto } from '$app/navigation';
 	import Box from '$lib/Box.svelte';
@@ -10,7 +5,7 @@
 	import Searchbar from '$lib/Searchbar.svelte';
 	import { onDestroy } from 'svelte';
 	import { currentPlace, destinationQuery, originQuery } from '$lib/stores';
-	import { searchBusStops, searchBusses, getNearbyArrivals } from '$lib/api';
+	import { searchBusStops, searchBusses, getNearbyArrivals } from '$lib/utilities';
 	import type { busStop, service, arrivals } from '$lib/types';
 
 	let arrivalInterval: NodeJS.Timeout;

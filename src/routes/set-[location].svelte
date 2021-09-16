@@ -1,12 +1,7 @@
-<script context="module">
-	// This component needs to access localStorage (client-side)
-	export const ssr = false;
-</script>
-
 <script lang="ts">
 	import { goto } from '$app/navigation';
 	import { page } from '$app/stores';
-	import { getPlaces } from '$lib/api';
+	import { getPlaces } from '$lib/utilities';
 	import Box from '$lib/Box.svelte';
 	import { destinationQuery } from '$lib/stores';
 	import { locationChipSearch } from './__layout.svelte';

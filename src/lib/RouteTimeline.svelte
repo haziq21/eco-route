@@ -1,8 +1,9 @@
 <script lang="ts">
 	import type { route } from '$lib/types';
-	import { goto } from '$app/navigation';
 	import { selectedRoute } from '$lib/stores';
 	import { page } from '$app/stores';
+	import { goto } from '$app/navigation';
+	import { compressJSON } from './utilities';
 
 	export let route: route;
 	export let longestRoute = route.distance;
@@ -10,14 +11,14 @@
 
 	function redirect() {
 		$selectedRoute = route;
-		goto('route-details');
+		goto(`/route-details/${compressJSON(route)}`);
 	}
 </script>
 
 <div
 	class="route"
 	style="width: {(route.distance / longestRoute) * 100}%"
-	class:thicker={$page.path === '/route-details'}
+	class:thicker={$page.path.includes('/route-details/')}
 	bind:offsetWidth={parentWidth}
 	on:click={redirect}
 >
@@ -26,7 +27,7 @@
 		{#if (segment.distance / route.distance) * parentWidth >= 5}
 			<div
 				class="segment {segment.mode} {segment.modeIdentity}"
-				class:border={$page.path === '/route-details'}
+				class:border={$page.path.includes('/route-details/')}
 				style="width: {(segment.distance / route.distance) * 100}%"
 			>
 				<span class="label">{segment.modeIdentity || 'walk'}</span>

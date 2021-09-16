@@ -1,10 +1,6 @@
-<script context="module">
-	export const ssr = false;
-</script>
-
 <script lang="ts">
 	import { page } from '$app/stores';
-	import { getPlaces } from '$lib/api';
+	import { getPlaces } from '$lib/utilities';
 	import Box from '$lib/Box.svelte';
 	import { currentPlace, destinationQuery, originQuery } from '$lib/stores';
 	import type { place } from '$lib/types';
