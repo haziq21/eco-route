@@ -26,26 +26,29 @@ async function fetchRawData(iteration = 0) {
 }
 
 export async function get({ params, query }) {
+	function cont() {
+		// Retrieve data
+		try {
+			const dataString = fs.readFileSync('busRoutes.json', 'utf8');
+			const fullData: busRoutes = JSON.parse(dataString);
+			const data = fullData[params.busNumber][`direction${query.get('direction')}`];
+
+			// Filter bus routes by service number and route direction
+			return { body: data };
+		} catch (err) {
+			console.log(err);
+			return;
+		}
+	}
+
 	// Create busRoutes.json if it has not yet been created
 	if (!fs.existsSync('busRoutes.json')) {
 		const data = await fetchRawData();
 		const formattedData = formatBusRoutes(data);
-
-		// I don't know where busRoutes.json gets created
-		fs.writeFileSync('busRoutes.json', JSON.stringify(formattedData));
-	}
-
-	// Retrieve data
-	try {
-		const dataString = fs.readFileSync('busRoutes.json', 'utf8');
-		const data: busRoutes = JSON.parse(dataString);
-
-		// Filter bus routes by service number and route direction
-		return { body: data[params.busNumber][`direction${query.get('direction')}`] };
-	} catch (err) {
-		console.log(err);
-		return;
-	}
+		fs.writeFile('busRoutes.json', JSON.stringify(formattedData), (err) => {
+			if (err) console.log(err);
+		});
+	} else return cont();
 }
 
 function formatBusRoutes(busRoutes: rawBusRoutePoint[]): busRoutes {
