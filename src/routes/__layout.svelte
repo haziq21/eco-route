@@ -9,9 +9,9 @@
 	import Chip from '$lib/Chip.svelte';
 	import { page } from '$app/stores';
 	import { fade, slide } from 'svelte/transition';
-	import { destinationQuery, originQuery, routes } from '$lib/stores';
+	import { destinationQuery, originQuery, routes, serviceRoute } from '$lib/stores';
 	import { writable } from 'svelte/store';
-	import { getBusStop, getDurationHTML, getArriveTimeHTML, uncompressJSON } from '$lib/utilities';
+	import { getDurationHTML, getArriveTimeHTML, uncompressJSON } from '$lib/utilities';
 	import type { route } from '$lib/types';
 
 	// Declaring some logic here to reduce clutter in HTML
@@ -22,10 +22,6 @@
 	$: showRouteSummary = $page.path.includes('/route-details/');
 	$: showBusStop = $page.path.includes('/bus-stop/');
 	$: showBusService = $page.path.includes('/bus-service/');
-
-	let serviceIsLoopService: boolean;
-	$: if ($page.path.includes('/bus-service/'))
-		serviceIsLoopService = $page.params.originCode === $page.params.destinationCode;
 
 	let locationChipTarget: string;
 	$: if ($page.path.includes('/set-home')) {
@@ -85,20 +81,18 @@
 
 		<div class="searchbar-layout">
 			<!-- Bus service page -->
-			{#if showBusService}
+			{#if showBusService && $serviceRoute}
 				<h2>{$page.params.busNumber}</h2>
 				<span class="bus-stop-code">
-					{#await getBusStop($page.params.originCode) then stop}
-						{stop.name}
+					{#await $serviceRoute then stops}
+						{stops[0].name}
+
+						{#if stops[stops.length - 1].code !== stops[0].code}
+							to {stops[stops.length - 1].name}
+						{:else}
+							(loop service)
+						{/if}
 					{/await}
-					{#if !serviceIsLoopService}
-						{#await getBusStop($page.params.destinationCode) then stop}
-							to
-							{stop.name}
-						{/await}
-					{:else}
-						(loop service)
-					{/if}
 				</span>
 			{/if}
 
@@ -114,8 +108,6 @@
 					placeholder="Enter your {locationChipTarget} location"
 					bind:text={$locationChipSearch}
 				/>
-
-				<!-- {$locationChipSearch} -->
 			{/if}
 
 			<!-- Origin searchbar -->

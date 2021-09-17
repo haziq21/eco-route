@@ -3,18 +3,14 @@
 	import { getBusStop, getBusArrivals } from '$lib/utilities';
 	import Box from '$lib/Box.svelte';
 	import BusArrivals from '$lib/BusArrivals.svelte';
-	import type { arrivals } from '$lib/types';
 
-	let arrivals: arrivals;
-	getBusStop($page.params.busStopCode)
-		.then((res) => getBusArrivals(res))
-		.then((res) => (arrivals = res));
+	let arrivals = getBusStop($page.params.busStopCode).then((res) => getBusArrivals(res));
 </script>
 
 <Box>
-	{#if !arrivals}
+	{#await arrivals}
 		<p>Loading bus arrivals...</p>
-	{:else}
-		<BusArrivals {arrivals} showHeader={false} />
-	{/if}
+	{:then res}
+		<BusArrivals arrivals={res} showHeader={false} />
+	{/await}
 </Box>

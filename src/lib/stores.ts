@@ -1,4 +1,4 @@
-import type { userLocation, place, route } from '$lib/types';
+import type { userLocation, place, route, busStop } from '$lib/types';
 import { readable, writable } from 'svelte/store';
 import type { Writable, Readable } from 'svelte/store';
 
@@ -34,3 +34,5 @@ export const originQuery: Writable<place | userLocation> = writable({});
 // Routes calculated on suggested-routes page
 export const routes: Writable<route[]> = writable([]);
 export const selectedRoute: Writable<route> = writable({});
+
+export const serviceRoute: Writable<Promise<busStop[]>> = writable();

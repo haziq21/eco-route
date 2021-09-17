@@ -129,15 +129,10 @@ export async function getPlaces(search: string): Promise<place[]> {
 export async function getBusRoute(busService: string): Promise<busStop[]> {
 	// I know this is slow and ineffecient
 	const busStops = await getAllBusStops();
-	const res = await fetch(`/api/bus-routes/${busService}`);
+	const res = await fetch(`/api/bus-routes/${busService}?direction=1`);
 	const data: string[] = await res.json();
 
-	const route = new Array(data.length);
-	const relevantStops = busStops.filter((busStop) => data.includes(busStop.code));
-
-	for (let i = 0; i < data.length; i++) {
-		route[i] = relevantStops.find((stop) => stop.code === data[i]);
-	}
+	const route = data.map((stopCode) => busStops.find((busStop) => busStop.code === stopCode));
 
 	return route;
 }

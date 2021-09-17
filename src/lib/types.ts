@@ -144,3 +144,18 @@ export interface userLocation extends place {
 	name: 'Current location';
 	hasPermission: boolean;
 }
+
+/* Types used by routes API */
+export interface rawBusRoutePoint {
+	ServiceNo: string;
+	Direction: 1 | 2;
+	StopSequence: number;
+	BusStopCode: string;
+}
+
+export interface busRoutes {
+	[key: string]: {
+		direction1: string[];
+		direction2: string[];
+	};
+}

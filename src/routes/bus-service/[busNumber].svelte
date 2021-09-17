@@ -2,12 +2,13 @@
 	import { page } from '$app/stores';
 	import { getBusRoute } from '$lib/utilities';
 	import Box from '$lib/Box.svelte';
+	import { serviceRoute } from '$lib/stores';
 
-	let serviceNumber = $page.params.busNumber;
+	$serviceRoute = getBusRoute($page.params.busNumber);
 </script>
 
 <Box>
-	{#await getBusRoute(serviceNumber)}
+	{#await $serviceRoute}
 		Loading bus route...
 	{:then busStops}
 		<ol>
@@ -24,6 +25,10 @@
 </Box>
 
 <style>
+	.stop-code {
+		font-size: 0.9rem;
+	}
+
 	h2 {
 		margin: 0;
 		padding: 0;
@@ -31,8 +36,12 @@
 	}
 
 	ol {
-		margin: 0;
+		margin: -18px 0;
 		padding: 0;
 		list-style-type: none;
+	}
+
+	li {
+		margin: 18px 0;
 	}
 </style>
