@@ -76,7 +76,7 @@
 		{/if}
 		<div>
 			{#each searchResults.services as service}
-				<a href="/bus-service/{service.number}/{service.origin}-{service.destination}">
+				<a href="/bus-service/{service.number}">
 					{service.number}
 				</a>
 			{/each}
