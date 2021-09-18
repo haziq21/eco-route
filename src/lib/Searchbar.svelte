@@ -22,7 +22,7 @@
 	bind:value={text}
 	bind:this={ref}
 	on:click={pageRedirect}
-	on:focus
+	on:click
 />
 
 <style>

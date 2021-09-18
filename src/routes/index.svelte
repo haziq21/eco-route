@@ -4,9 +4,10 @@
 	import BusArrivals from '$lib/BusArrivals.svelte';
 	import Searchbar from '$lib/Searchbar.svelte';
 	import { onDestroy } from 'svelte';
-	import { currentPlace, destinationQuery, originQuery } from '$lib/stores';
+	import { currentPlace, destinationQuery, originQuery, searchingBusses } from '$lib/stores';
 	import { searchBusStops, searchBusses, getNearbyArrivals } from '$lib/utilities';
 	import type { busStop, service, arrivals } from '$lib/types';
+	import BackButton from '$lib/BackButton.svelte';
 
 	let arrivalInterval: NodeJS.Timeout;
 	onDestroy(() => clearInterval(arrivalInterval));
@@ -48,13 +49,28 @@
 </script>
 
 <Box>
-	{#if !searchText}
-		<h1 transition:slide>Bus arrivals</h1>
+	{#if !$searchingBusses}
+		<h1 transition:slide|local>Bus arrivals</h1>
 	{/if}
-	<Searchbar placeholder="Search for a bus number or stop" bind:text={searchText} />
+	<div class="side-by-side">
+		{#if $searchingBusses}
+			<BackButton
+				colour="icon-text"
+				action={() => {
+					$searchingBusses = false;
+					searchText = '';
+				}}
+			/>
+		{/if}
+		<Searchbar
+			placeholder="Search for a bus number or stop"
+			bind:text={searchText}
+			on:click={() => ($searchingBusses = true)}
+		/>
+	</div>
 
 	<!-- Show bus arrivals if searchbox is blank -->
-	{#if !searchText}
+	{#if !$searchingBusses}
 		<!-- User needs to explicitly allow location permission -->
 		{#if !$currentPlace.hasPermission}
 			<p class="location-permission">Enable location permissions to show nearby bus stops</p>
@@ -103,6 +119,11 @@
 </Box>
 
 <style>
+	.side-by-side {
+		display: flex;
+		flex-direction: row;
+	}
+
 	.location-permission {
 		margin: 30px auto;
 		text-align: center;

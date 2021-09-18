@@ -1,16 +1,10 @@
-<script>
-	export let title = undefined;
-</script>
-
 <div id="box">
-	{#if title}
-		<h1>{title}</h1>
-	{/if}
 	<slot />
 </div>
 
 <style>
 	#box {
+		position: relative;
 		background-color: var(--overlay);
 		color: var(--text);
 		box-shadow: var(--shadow);
@@ -18,5 +12,6 @@
 		padding: var(--space);
 		margin-bottom: var(--space);
 		overflow: hidden;
+		z-index: 1;
 	}
 </style>
