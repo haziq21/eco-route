@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { goto } from '$app/navigation';
+	import { slide } from 'svelte/transition';
 	import Box from '$lib/Box.svelte';
 	import BusArrivals from '$lib/BusArrivals.svelte';
 	import Searchbar from '$lib/Searchbar.svelte';
@@ -48,12 +48,10 @@
 </script>
 
 <Box>
-	<h1>Bus arrivals</h1>
-	<Searchbar
-		placeholder="Search for a bus number or stop"
-		bind:text={searchText}
-		on:focus={() => goto('/#box', { keepfocus: true, replaceState: true })}
-	/>
+	{#if !searchText}
+		<h1 transition:slide>Bus arrivals</h1>
+	{/if}
+	<Searchbar placeholder="Search for a bus number or stop" bind:text={searchText} />
 
 	<!-- Show bus arrivals if searchbox is blank -->
 	{#if !searchText}
