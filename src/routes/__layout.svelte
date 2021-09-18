@@ -5,6 +5,7 @@
 	import { page } from '$app/stores';
 	import { fade, slide } from 'svelte/transition';
 	import {
+		busStopArrivals,
 		destinationQuery,
 		locationChipSearch,
 		originQuery,
@@ -41,12 +42,13 @@
 	$: if (!$page.path.includes('/suggested-routes') && !$page.path.includes('/route-details'))
 		$routes = [];
 
-	// Skip these pages when the back button is clicked
+	// ATTENTION: This doesn't work.
 	window.onpopstate = () => {
-		if (
-			window.location.pathname.includes('/select-') ||
-			window.location.pathname.includes('/set-')
-		) {
+		console.log('onpopstate() called');
+
+		// Skip these pages when the back button is clicked
+		if (location.pathname.includes('/select-') || location.pathname.includes('/set-')) {
+			console.log('going back');
 			history.back();
 		}
 	};
@@ -95,7 +97,7 @@
 				<Chip icon="work" name="work">Work</Chip>
 			{/if}
 
-			<div class="searchbar-layout">
+			<div class={showBusService || showBusStop ? 'vertical-stack' : 'searchbar-layout'}>
 				<!-- Bus service page -->
 				{#if showBusService && $serviceRoute}
 					<h2>{$page.params.busNumber}</h2>
@@ -113,8 +115,11 @@
 				{/if}
 
 				<!-- Bus stop page -->
-				{#if showBusStop}
-					<h2>{$page.params.busStopName}</h2>
+				{#if showBusStop && $busStopArrivals}
+					{#await $busStopArrivals then arrivals}
+						<h2>{arrivals.busStopName}</h2>
+					{/await}
+
 					<span class="bus-stop-code">{$page.params.busStopCode}</span>
 				{/if}
 
@@ -168,7 +173,7 @@
 
 	.bus-stop-code {
 		color: var(--icon-text);
-		font-size: 0.9rem;
+		/* font-size: 0.9rem; */
 		font-weight: bold;
 	}
 
@@ -179,6 +184,10 @@
 		box-shadow: var(--shadow), 0 0 10px var(--space) var(--background);
 		padding: var(--space);
 		margin-bottom: var(--space);
+	}
+
+	.vertical-stack {
+		display: grid;
 	}
 
 	.searchbar-layout {

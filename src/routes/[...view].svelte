@@ -105,7 +105,7 @@
 		<ul>
 			{#each searchResults.stops as busStop}
 				<li>
-					<a href="/bus-stop/{busStop.code}/{busStop.name}">
+					<a href="/bus-stop/{busStop.code}">
 						<span class="bus-stop-code">{busStop.code}</span>
 						{busStop.name}
 					</a>

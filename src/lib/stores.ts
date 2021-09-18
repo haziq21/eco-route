@@ -1,4 +1,4 @@
-import type { userLocation, place, route, busStop } from '$lib/types';
+import type { userLocation, place, route, busStop, arrivals } from '$lib/types';
 import { readable, writable } from 'svelte/store';
 import type { Writable, Readable } from 'svelte/store';
 
@@ -36,6 +36,6 @@ export const routes: Writable<route[]> = writable([]);
 export const selectedRoute: Writable<route> = writable({});
 
 export const serviceRoute: Writable<Promise<busStop[]>> = writable();
-
+export const busStopArrivals: Writable<Promise<arrivals>> = writable();
 // Value of searchbar on set-[location] page
 export const locationChipSearch = writable('');
