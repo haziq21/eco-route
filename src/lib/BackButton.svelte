@@ -2,17 +2,23 @@
 	import { locationChipSearch } from '$lib/stores';
 
 	export let colour: 'overlay' | 'icon-text' = 'overlay';
-	export let action = undefined;
 
-	// Go back to the previous page
-	function back() {
-		history.back();
+	// Perform extra actions on back button navigation
+	// (e.g. clearing a search bar)
+	export let extraActions = () => {
 		$locationChipSearch = '';
-		if (action) action();
-	}
+	};
+
+	window.onpopstate = extraActions;
 </script>
 
-<span on:click={back} class="material-icons back-button" style="color: var(--{colour})">
+<!-- on:click={history.back} throws "'back' called on 
+	an object that does not implement interface History" -->
+<span
+	on:click={() => history.back()}
+	class="material-icons back-button"
+	style="color: var(--{colour})"
+>
 	arrow_back_ios
 </span>
 

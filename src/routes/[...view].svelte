@@ -60,7 +60,7 @@
 	{/if}
 	<div class="side-by-side">
 		{#if searchingBusses}
-			<BackButton colour="icon-text" action={history.back} />
+			<BackButton colour="icon-text" />
 		{/if}
 		<Searchbar
 			placeholder="Search for a bus number or stop"
