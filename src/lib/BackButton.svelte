@@ -18,5 +18,6 @@
 <style>
 	.back-button {
 		padding: 6px 0;
+		cursor: pointer;
 	}
 </style>
