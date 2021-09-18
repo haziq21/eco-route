@@ -9,8 +9,9 @@
 	import type { busStop, service, arrivals } from '$lib/types';
 	import BackButton from '$lib/BackButton.svelte';
 
-	let arrivalInterval: NodeJS.Timeout;
-	onDestroy(() => clearInterval(arrivalInterval));
+	window.onpopstate = () => {
+		if ($searchingBusses) $searchingBusses = false;
+	};
 
 	// Content of bus number / bus stop searchbar
 	let searchText: string;
@@ -31,6 +32,8 @@
 	};
 
 	let nearbyArrivals: arrivals[];
+	let arrivalInterval: NodeJS.Timeout;
+	onDestroy(() => clearInterval(arrivalInterval));
 
 	$: if ($currentPlace.hasPermission) {
 		// Reset origin query to user's current location when they go back to home page
@@ -59,13 +62,17 @@
 				action={() => {
 					$searchingBusses = false;
 					searchText = '';
+					location.hash = '';
 				}}
 			/>
 		{/if}
 		<Searchbar
 			placeholder="Search for a bus number or stop"
 			bind:text={searchText}
-			on:click={() => ($searchingBusses = true)}
+			on:click={() => {
+				$searchingBusses = true;
+				location.hash = 'searching';
+			}}
 		/>
 	</div>
 
