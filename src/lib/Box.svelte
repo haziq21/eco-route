@@ -13,5 +13,6 @@
 		margin-bottom: var(--space);
 		overflow: hidden;
 		z-index: 1;
+		scroll-snap-align: start;
 	}
 </style>
