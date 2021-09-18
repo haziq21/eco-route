@@ -8,10 +8,11 @@
 	function back() {
 		history.back();
 		$locationChipSearch = '';
+		if (action) action();
 	}
 </script>
 
-<span on:click={action || back} class="material-icons back-button" style="color: var(--{colour})">
+<span on:click={back} class="material-icons back-button" style="color: var(--{colour})">
 	arrow_back_ios
 </span>
 

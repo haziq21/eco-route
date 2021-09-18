@@ -62,7 +62,6 @@
 				action={() => {
 					$searchingBusses = false;
 					searchText = '';
-					location.hash = '';
 				}}
 			/>
 		{/if}
@@ -70,8 +69,8 @@
 			placeholder="Search for a bus number or stop"
 			bind:text={searchText}
 			on:click={() => {
-				$searchingBusses = true;
 				location.hash = 'searching';
+				$searchingBusses = true;
 			}}
 		/>
 	</div>
@@ -95,9 +94,9 @@
 		{#if searchResults.services.length}
 			<h3>Bus services</h3>
 		{/if}
-		<div>
+		<div class="bus-services">
 			{#each searchResults.services as service}
-				<a href="/bus-service/{service.number}">
+				<a class="service-number" href="/bus-service/{service.number}">
 					{service.number}
 				</a>
 			{/each}
@@ -126,6 +125,22 @@
 </Box>
 
 <style>
+	.bus-services {
+		display: flex;
+		flex-direction: row;
+		flex-wrap: wrap;
+		margin: -3px;
+	}
+
+	.bus-services > a {
+		padding: 3px 6px;
+		margin: 3px;
+		border-radius: var(--border-radius-sm);
+		background-color: var(--header);
+		color: var(--overlay);
+		text-align: center;
+	}
+
 	.side-by-side {
 		display: flex;
 		flex-direction: row;
