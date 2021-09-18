@@ -52,8 +52,6 @@
 	}
 
 	.unused {
-		color: var(--icon-text);
-		background-color: var(--background);
-		box-shadow: var(--shadow) inset;
+		color: rgb(167, 247, 199);
 	}
 </style>

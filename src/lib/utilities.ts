@@ -88,14 +88,15 @@ export async function searchBusStops(query: string): Promise<busStop[]> {
 }
 
 /** Search for bus services by bus number */
-export async function searchBusses(query: string): Promise<service[]> {
+export async function searchBusses(query: string): Promise<string[]> {
 	if (!query) return [];
 
+	query = query.toLowerCase();
 	const res = await fetch('/api/bus-services');
-	const data: service[] = await res.json();
+	const data: string[] = await res.json();
 
-	// Return first 10 bus services with bus numbers that match the query
-	return data.filter((service) => service.number.includes(query)).slice(0, 20);
+	// Return first 19 bus services with bus numbers that match the query
+	return data.filter((service) => service.toLowerCase().includes(query)).slice(0, 20);
 }
 
 /** Fetches bus stops within 500 metres of user */
@@ -148,6 +149,27 @@ export function getPlaceFromStorage(storageKey: string): place | undefined {
 	if (locationString) {
 		return JSON.parse(locationString);
 	}
+}
+
+/** Sorting function for bus service numbers. This is meant to be used as `array.sort(sortBusNumbers)`. */
+export function sortBusNumbers(service1: string, service2: string): number {
+	// Extract numbers from bus code
+	const number1 = service1.match(/\d+/g)[0];
+	const number2 = service2.match(/\d+/g)[0];
+
+	// If one service starts with a number while the other doesn't, the service
+	// that starts with a number goes first. E.g. CT8 and 811T -> 811T goes first.
+	if (service1.startsWith(number1) !== service2.startsWith(number2)) {
+		return +service2.startsWith(number2) - +service1.startsWith(number1);
+	}
+
+	// Try sorting by number first
+	if (number1 !== number2) {
+		return parseInt(number1) - parseInt(number2);
+	}
+
+	// Then sort alphabetically
+	return service1 > service2 ? 1 : -1;
 }
 
 // Helper functions to convert JSON objects into URL-friendly strings

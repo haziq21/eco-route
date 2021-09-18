@@ -1,13 +1,15 @@
 import { DATAMALL_KEY } from '$lib/env';
-import type { rawService, service } from '$lib/types';
+import { sortBusNumbers } from '$lib/utilities';
+import type { rawService } from '$lib/types';
 
-export async function get(): Promise<{ body: service[] }> {
+export async function get(): Promise<{ body: string[] }> {
 	const services = await fetchData();
 	// Remove duplicates in services
-	const formattedServices = [...new Set(services.map(formatService))];
+	const formattedServices = [...new Set(services.map((service) => service.ServiceNo))];
 
 	return {
-		body: formattedServices
+		// Sort by bus number
+		body: formattedServices.sort(sortBusNumbers)
 	};
 }
 
@@ -30,12 +32,4 @@ async function fetchData(iteration = 0) {
 	}
 
 	return data;
-}
-
-function formatService(data: rawService): service {
-	return {
-		number: data.ServiceNo,
-		origin: data.OriginCode,
-		destination: data.DestinationCode
-	};
 }

@@ -21,7 +21,7 @@
 	let searchText: string;
 
 	// Search results
-	let searchResults: { stops: busStop[]; services: service[] } = { stops: [], services: [] };
+	let searchResults: { stops: busStop[]; services: string[] } = { stops: [], services: [] };
 	$: searchBusStops(searchText).then((res) => (searchResults.stops = res));
 	$: searchBusses(searchText).then((res) => (searchResults.services = res));
 
@@ -60,7 +60,7 @@
 	{/if}
 	<div class="side-by-side">
 		{#if searchingBusses}
-			<BackButton colour="icon-text" />
+			<BackButton colour="icon-text" extraActions={() => (searchText = '')} />
 		{/if}
 		<Searchbar
 			placeholder="Search for a bus number or stop"
@@ -92,8 +92,8 @@
 		{/if}
 		<div class="bus-services">
 			{#each searchResults.services as service}
-				<a class="service-number" href="/bus-service/{service.number}">
-					{service.number}
+				<a class="service-number" href="/bus-service/{service}">
+					{service}
 				</a>
 			{/each}
 		</div>
@@ -138,6 +138,7 @@
 		border-radius: var(--border-radius-sm);
 		background-color: var(--header);
 		color: var(--overlay);
+		font-weight: bold;
 		text-align: center;
 	}
 

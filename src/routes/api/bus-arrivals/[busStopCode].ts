@@ -1,4 +1,5 @@
 import { DATAMALL_KEY } from '$lib/env';
+import { sortBusNumbers } from '$lib/utilities';
 import type {
 	rawBusArrival,
 	rawBusStopArrivals,
@@ -28,30 +29,13 @@ export async function get({ params }) {
 }
 
 function formatArrivals(data: rawBusStopArrivals): namelessBusStopArrivals {
-	// Some bus numbers / codes have letters as well as numbers,
-	// so here we're sorting by number first then by letter.
-	function busNumberSort(bus1: serviceArrivals, bus2: serviceArrivals) {
-		// Extract numbers from bus code
-		const number1 = bus1.number.match(/\d+/g)[0];
-		const number2 = bus2.number.match(/\d+/g)[0];
-
-		// bus1 and bus2 don't have the same number
-		// (e.g. 7A and 7B have the same number)
-		if (number1 !== number2) {
-			return parseInt(number1) - parseInt(number2);
-		}
-
-		// Sort alphabetically
-		return bus1 > bus2 ? 1 : -1;
-	}
-
 	return {
 		busStopCode: data.BusStopCode,
 		services: data.Services
 			// Reformat JSON data
 			.map(formatService)
 			// Sort by bus number
-			.sort(busNumberSort)
+			.sort(({ number: a }, { number: b }) => sortBusNumbers(a, b))
 	};
 }
 
