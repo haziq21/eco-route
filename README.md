@@ -5,10 +5,9 @@ EcoRoute is a work-in-progress progressive web app meant to encourage car and ta
 ## Features
 
 - Route calculation using only public transport.
-- Location-based alarms / alerts (for use during travel).
 - Bus arrival timings
-- Bus / MRT service announcements
+- Bus route information
 
 ## Using the PWA
 
-On android when visiting https://ecoroute.vercel.app/ an 'add to home screen' button should appear. On iOS Safari, click on share > add to home screen.
+As of now, EcoRoute is best viewed on mobile screens. On android, when visiting https://ecoroute.vercel.app/, an 'add to home screen' button should appear. Alternatively, click the three dot menu > install. On iOS Safari, click on share > add to home screen.
