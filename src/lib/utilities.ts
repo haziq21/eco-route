@@ -91,7 +91,7 @@ export async function searchBusses(query: string): Promise<service[]> {
 	const data: service[] = await res.json();
 
 	// Return first 10 bus services with bus numbers that match the query
-	return data.filter((service) => service.number.includes(query)).slice(0, 11);
+	return data.filter((service) => service.number.includes(query)).slice(0, 20);
 }
 
 /** Fetches bus stops within 500 metres of user */

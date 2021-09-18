@@ -3,8 +3,7 @@
 	import { page } from '$app/stores';
 	import { getPlaces } from '$lib/utilities';
 	import Box from '$lib/Box.svelte';
-	import { destinationQuery } from '$lib/stores';
-	import { locationChipSearch } from '$lib/stores';
+	import { destinationQuery, locationChipSearch } from '$lib/stores';
 	import type { place } from '$lib/types';
 
 	let searchResults: place[] = [];
