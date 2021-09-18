@@ -7,7 +7,7 @@
 
 <span class="info" class:arr={!arrival.minutesToArrival}>
 	{#key arrival.minutesToArrival}
-		<span class="number" transition:fade>
+		<span class="number" transition:fade|local>
 			{arrival.minutesToArrival ? arrival.minutesToArrival : 'Arr'}
 		</span>
 	{/key}

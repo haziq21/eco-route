@@ -1,5 +1,6 @@
 <script lang="ts">
 	import type { arrivals } from '$lib/types';
+	import { fade } from 'svelte/transition';
 	import ArrivalMarker from './ArrivalMarker.svelte';
 
 	export let arrivals: arrivals;
@@ -7,9 +8,9 @@
 </script>
 
 {#if showHeader}
-	<h3>{arrivals.busStopName}</h3>
+	<h3 transition:fade>{arrivals.busStopName}</h3>
 {/if}
-<div class="bus-stop">
+<div class="bus-stop" transition:fade>
 	{#each arrivals.services as service}
 		<!-- Bus number -->
 		<h3 class="bus-number">{service.number}</h3>
@@ -29,12 +30,12 @@
 			<span class="error-message">No arrivals available</span>
 		{/if}
 		<!-- {#each service.arrivals as arrival}
-			<ArrivalMarker {arrival} />
-
-			{#if arrival !== service.arrivals[service.arrivals.length - 1]}
-				<span class="separator">&lt;</span>
-			{/if}
-		{/each} -->
+				<ArrivalMarker {arrival} />
+	
+				{#if arrival !== service.arrivals[service.arrivals.length - 1]}
+					<span class="separator">&lt;</span>
+				{/if}
+			{/each} -->
 	{/each}
 </div>
 
