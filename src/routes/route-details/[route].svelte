@@ -34,33 +34,7 @@
 	</div>
 </Box>
 
-<div class="begin-guide" in:fly={{ y: 50, duration: 400 }}>Start travel guide</div>
-
 <style>
-	.begin-guide {
-		display: flex;
-		flex-direction: row;
-		align-items: center;
-
-		position: fixed;
-		bottom: 30px;
-		left: 50%;
-		transform: translateX(-50%);
-
-		padding: var(--space-sm) var(--space-md);
-		border-radius: var(--border-radius-sm);
-		color: var(--overlay);
-		background-color: var(--header);
-		box-shadow: var(--shadow);
-		font-size: 1rem;
-	}
-
-	.begin-guide::before {
-		content: '\27A4';
-		margin-right: var(--space-sm);
-		transform: rotate(-90deg);
-	}
-
 	.timeline {
 		display: flex;
 		flex-direction: column;
