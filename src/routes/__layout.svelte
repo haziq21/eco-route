@@ -93,7 +93,7 @@
 	 SvelteKit is still in beta, layout resets are still a bit buggy. For instance, 
 	 the layout is loaded twice upon navigation if navigation triggers animation. -->
 {#if !($page.params.view === 'search-busses')}
-	<div class="box" transition:sink>
+	<div class="box" out:sink in:float>
 		<!-- "Go somewhere" homepage header -->
 		{#if $page.path === '/'}
 			<span class="header-layout" out:slide|local>
