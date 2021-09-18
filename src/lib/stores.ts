@@ -37,7 +37,5 @@ export const selectedRoute: Writable<route> = writable({});
 
 export const serviceRoute: Writable<Promise<busStop[]>> = writable();
 
-export const searchingBusses = writable(false);
-
 // Value of searchbar on set-[location] page
 export const locationChipSearch = writable('');

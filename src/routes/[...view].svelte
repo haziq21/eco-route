@@ -4,10 +4,18 @@
 	import BusArrivals from '$lib/BusArrivals.svelte';
 	import Searchbar from '$lib/Searchbar.svelte';
 	import { onDestroy } from 'svelte';
-	import { currentPlace, destinationQuery, originQuery, searchingBusses } from '$lib/stores';
+	import { currentPlace, destinationQuery, originQuery } from '$lib/stores';
 	import { searchBusStops, searchBusses, getNearbyArrivals } from '$lib/utilities';
 	import type { busStop, service, arrivals } from '$lib/types';
 	import BackButton from '$lib/BackButton.svelte';
+	import { goto } from '$app/navigation';
+	import { page } from '$app/stores';
+
+	// Redirect invalid URLs to homepage
+	if (!['', 'search-busses'].includes($page.params.view)) goto('/');
+
+	// Declaring this logic here to reduce clutter in HTML
+	$: searchingBusses = $page.params.view === 'search-busses';
 
 	let arrivalInterval: NodeJS.Timeout;
 	onDestroy(() => clearInterval(arrivalInterval));
@@ -32,6 +40,7 @@
 
 	let nearbyArrivals: arrivals[];
 
+	// Don't load this if we don't have geolocation permission
 	$: if ($currentPlace.hasPermission) {
 		// Reset origin query to user's current location when they go back to home page
 		$originQuery = $currentPlace;
@@ -49,28 +58,29 @@
 </script>
 
 <Box>
-	{#if !$searchingBusses}
+	{#if !searchingBusses}
 		<h1 transition:slide|local>Bus arrivals</h1>
 	{/if}
 	<div class="side-by-side">
-		{#if $searchingBusses}
+		{#if searchingBusses}
 			<BackButton
 				colour="icon-text"
 				action={() => {
-					$searchingBusses = false;
-					searchText = '';
+					history.back();
 				}}
 			/>
 		{/if}
 		<Searchbar
 			placeholder="Search for a bus number or stop"
 			bind:text={searchText}
-			on:click={() => ($searchingBusses = true)}
+			on:click={() => {
+				if (!searchingBusses) goto('/search-busses', { keepfocus: true });
+			}}
 		/>
 	</div>
 
 	<!-- Show bus arrivals if searchbox is blank -->
-	{#if !$searchingBusses}
+	{#if !searchingBusses}
 		<!-- User needs to explicitly allow location permission -->
 		{#if !$currentPlace.hasPermission}
 			<p class="location-permission">Enable location permissions to show nearby bus stops</p>

@@ -9,7 +9,6 @@
 		locationChipSearch,
 		originQuery,
 		routes,
-		searchingBusses,
 		serviceRoute
 	} from '$lib/stores';
 	import { getDurationHTML, getArriveTimeHTML, uncompressJSON } from '$lib/utilities';
@@ -75,7 +74,7 @@
 <!-- I know there are a lot of {#if }s. I'd use layout resets on each page but since
 	 SvelteKit is still in beta, layout resets are still a bit buggy. For instance, 
 	 the layout is loaded twice upon navigation if navigation triggers animation. -->
-{#if !($searchingBusses && $page.path === '/')}
+{#if !($page.params.view === 'search-busses')}
 	<div class="box" transition:sink>
 		<!-- "Go somewhere" homepage header -->
 		{#if $page.path === '/'}
