@@ -1,13 +1,16 @@
 <script lang="ts">
+	import { fade } from 'svelte/transition';
 	import type { busArrival } from '$lib/types';
 
 	export let arrival: busArrival;
 </script>
 
 <span class="info" class:arr={!arrival.minutesToArrival}>
-	<span class="number">
-		{arrival.minutesToArrival ? arrival.minutesToArrival : 'Arr'}
-	</span>
+	{#key arrival.minutesToArrival}
+		<span class="number" transition:fade>
+			{arrival.minutesToArrival ? arrival.minutesToArrival : 'Arr'}
+		</span>
+	{/key}
 
 	{#if arrival.minutesToArrival}
 		<span class="time-unit">min</span>

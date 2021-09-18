@@ -71,6 +71,22 @@
 				`transform: scale(${t * 0.3 + 0.7});`
 		};
 	}
+
+	// Float in from top animation function
+	function float(node, { delay = 0, duration = 500, easing = cubicOut }) {
+		const style = getComputedStyle(node);
+		const marginBottom = parseFloat(style.marginBottom);
+		const height = parseFloat(style.height);
+
+		return {
+			delay,
+			duration,
+			easing,
+			css: (t, u) =>
+				`margin-bottom: ${t * (marginBottom + height) - height}px;` +
+				`transform: translateY(calc(${u * -100}% - ${u * marginBottom}px));`
+		};
+	}
 </script>
 
 <!-- I know there are a lot of {#if }s. I'd use layout resets on each page but since
@@ -173,7 +189,6 @@
 
 	.bus-stop-code {
 		color: var(--icon-text);
-		/* font-size: 0.9rem; */
 		font-weight: bold;
 	}
 
