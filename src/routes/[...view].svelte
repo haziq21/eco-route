@@ -22,10 +22,8 @@
 
 	// Search results
 	let searchResults: { stops: busStop[]; services: service[] } = { stops: [], services: [] };
-	$: if (searchText) {
-		searchBusStops(searchText).then((res) => (searchResults.stops = res));
-		searchBusses(searchText).then((res) => (searchResults.services = res));
-	}
+	$: searchBusStops(searchText).then((res) => (searchResults.stops = res));
+	$: searchBusses(searchText).then((res) => (searchResults.services = res));
 
 	// Clear destination query when user goes back to home page
 	$destinationQuery = {
@@ -62,12 +60,7 @@
 	{/if}
 	<div class="side-by-side">
 		{#if searchingBusses}
-			<BackButton
-				colour="icon-text"
-				action={() => {
-					history.back();
-				}}
-			/>
+			<BackButton colour="icon-text" action={history.back} />
 		{/if}
 		<Searchbar
 			placeholder="Search for a bus number or stop"
@@ -122,7 +115,11 @@
 
 		<!-- No results -->
 		{#if !searchResults.stops.length && !searchResults.services.length}
-			<p>No results...</p>
+			{#if searchText}
+				<p>No results for "{searchText}"</p>
+			{:else}
+				<p>Type something to search</p>
+			{/if}
 		{/if}
 	{/if}
 </Box>
@@ -134,6 +131,7 @@
 		flex-wrap: wrap;
 		margin: -3px;
 	}
+
 	.bus-services > a {
 		padding: 3px 6px;
 		margin: 3px;

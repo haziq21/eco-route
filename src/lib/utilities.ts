@@ -56,6 +56,8 @@ export async function getBusStop(code: string): Promise<busStop> {
 
 /** Searches for bus stops by name or code */
 export async function searchBusStops(query: string): Promise<busStop[]> {
+	if (!query) return [];
+
 	// Case-insensitive keyword search
 	const queries = query
 		.toLowerCase()
@@ -87,6 +89,8 @@ export async function searchBusStops(query: string): Promise<busStop[]> {
 
 /** Search for bus services by bus number */
 export async function searchBusses(query: string): Promise<service[]> {
+	if (!query) return [];
+
 	const res = await fetch('/api/bus-services');
 	const data: service[] = await res.json();
 

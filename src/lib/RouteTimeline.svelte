@@ -10,8 +10,10 @@
 	let parentWidth: number;
 
 	function redirect() {
-		$selectedRoute = route;
-		goto(`/route-details/${compressJSON(route)}`);
+		if (!$page.path.includes('/route-details/')) {
+			$selectedRoute = route;
+			goto(`/route-details/${compressJSON(route)}`);
+		}
 	}
 </script>
 
