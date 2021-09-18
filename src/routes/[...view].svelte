@@ -17,10 +17,6 @@
 	// Declaring this logic here to reduce clutter in HTML
 	$: searchingBusses = $page.params.view === 'search-busses';
 
-	window.onpopstate = () => {
-		if ($searchingBusses) $searchingBusses = false;
-	};
-
 	// Content of bus number / bus stop searchbar
 	let searchText: string;
 
