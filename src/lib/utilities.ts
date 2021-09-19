@@ -1,7 +1,8 @@
 /* This module provides utility functions for convenience */
 
 import JSONCrush from '$lib/JSONCrush';
-import type { arrivals, service, busStop, place, route } from '$lib/types';
+import { cubicOut } from 'svelte/easing';
+import type { arrivals, busStop, place, route } from '$lib/types';
 
 // Helper functions to interface with the APIs
 
@@ -215,4 +216,41 @@ export function getDurationHTML({ duration }: route): string {
 	} else {
 		return wrapInSpan('Instant', 'time'); // Just in case...
 	}
+}
+
+// Animation functions
+
+/** Sink into background animation function */
+export function sink(node: Element, { delay = 0, duration = 500, easing = cubicOut }: any) {
+	const style = getComputedStyle(node);
+	const opacity = +style.opacity;
+	const marginBottom = parseFloat(style.marginBottom);
+	const height = parseFloat(style.height);
+
+	return {
+		delay,
+		duration,
+		easing,
+		css: (t: number) =>
+			`overflow: hidden;` +
+			`opacity: ${t * opacity};` +
+			`margin-bottom: ${t * (marginBottom + height) - height}px;` +
+			`transform: scale(${t * 0.3 + 0.7});`
+	};
+}
+
+/** Float in from top animation function */
+export function float(node: Element, { delay = 0, duration = 500, easing = cubicOut }: any) {
+	const style = getComputedStyle(node);
+	const marginBottom = parseFloat(style.marginBottom);
+	const height = parseFloat(style.height);
+
+	return {
+		delay,
+		duration,
+		easing,
+		css: (t: number, u: number) =>
+			`margin-bottom: ${t * (marginBottom + height) - height}px;` +
+			`transform: translateY(calc(${u * -100}% - ${u * marginBottom}px));`
+	};
 }

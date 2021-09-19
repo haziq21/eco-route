@@ -12,10 +12,9 @@
 		routes,
 		serviceRoute
 	} from '$lib/stores';
-	import { getDurationHTML, getArriveTimeHTML, uncompressJSON } from '$lib/utilities';
+	import { getDurationHTML, getArriveTimeHTML, uncompressJSON, sink, float } from '$lib/utilities';
 	import type { route } from '$lib/types';
 	import BackButton from '$lib/BackButton.svelte';
-	import { cubicOut } from 'svelte/easing';
 
 	// Declaring some logic here to reduce clutter in HTML
 	$: showOriginSearchbar = ['/select-origin', '/suggested-routes'].includes($page.path);
@@ -52,41 +51,6 @@
 			history.back();
 		}
 	};
-
-	// Sink into background animation function
-	function sink(node, { delay = 0, duration = 500, easing = cubicOut }) {
-		const style = getComputedStyle(node);
-		const opacity = +style.opacity;
-		const marginBottom = parseFloat(style.marginBottom);
-		const height = parseFloat(style.height);
-
-		return {
-			delay,
-			duration,
-			easing,
-			css: (t) =>
-				`overflow: hidden;` +
-				`opacity: ${t * opacity};` +
-				`margin-bottom: ${t * (marginBottom + height) - height}px;` +
-				`transform: scale(${t * 0.3 + 0.7});`
-		};
-	}
-
-	// Float in from top animation function
-	function float(node, { delay = 0, duration = 500, easing = cubicOut }) {
-		const style = getComputedStyle(node);
-		const marginBottom = parseFloat(style.marginBottom);
-		const height = parseFloat(style.height);
-
-		return {
-			delay,
-			duration,
-			easing,
-			css: (t, u) =>
-				`margin-bottom: ${t * (marginBottom + height) - height}px;` +
-				`transform: translateY(calc(${u * -100}% - ${u * marginBottom}px));`
-		};
-	}
 </script>
 
 <!-- I know there are a lot of {#if }s. I'd use layout resets on each page but since
