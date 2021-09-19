@@ -92,109 +92,95 @@
 <!-- I know there are a lot of {#if }s. I'd use layout resets on each page but since
 	 SvelteKit is still in beta, layout resets are still a bit buggy. For instance, 
 	 the layout is loaded twice upon navigation if navigation triggers animation. -->
-<div class="everything">
-	{#if !($page.params.view === 'search-busses')}
-		<div class="box" out:sink in:float>
-			<!-- "Go somewhere" homepage header -->
-			{#if $page.path === '/'}
-				<span class="header-layout" out:slide|local>
-					<h1 out:fade|local>Go somewhere</h1>
-				</span>
+{#if !($page.params.view === 'search-busses')}
+	<div class="box" out:sink in:float>
+		<!-- "Go somewhere" homepage header -->
+		{#if $page.path === '/'}
+			<span class="header-layout" out:slide|local>
+				<h1 out:fade|local>Go somewhere</h1>
+			</span>
+		{/if}
+
+		<div class="header-layout">
+			<!-- Hide back button on homepage -->
+			{#if $page.path !== '/'}
+				<!-- Back button -->
+				<!-- For some reason, on:click={history.back} throws 
+			'window is not defined' even when SSR is disabled-->
+				<BackButton />
+			{:else}
+				<Chip icon="home" name="home">Home</Chip>
+				<Chip icon="work" name="work">Work</Chip>
 			{/if}
 
-			<div class="header-layout">
-				<!-- Hide back button on homepage -->
-				{#if $page.path !== '/'}
-					<!-- Back button -->
-					<!-- For some reason, on:click={history.back} throws
-				'window is not defined' even when SSR is disabled-->
-					<BackButton />
-				{:else}
-					<Chip icon="home" name="home">Home</Chip>
-					<Chip icon="work" name="work">Work</Chip>
+			<div class={showBusService || showBusStop ? 'vertical-stack' : 'searchbar-layout'}>
+				<!-- Bus service page -->
+				{#if showBusService && $serviceRoute}
+					<h2>{$page.params.busNumber}</h2>
+					<span class="bus-stop-code">
+						{#await $serviceRoute then stops}
+							{stops[0].name}
+
+							{#if stops[stops.length - 1].code !== stops[0].code}
+								to {stops[stops.length - 1].name}
+							{:else}
+								(loop service)
+							{/if}
+						{/await}
+					</span>
 				{/if}
 
-				<div class={showBusService || showBusStop ? 'vertical-stack' : 'searchbar-layout'}>
-					<!-- Bus service page -->
-					{#if showBusService && $serviceRoute}
-						<h2>{$page.params.busNumber}</h2>
-						<span class="bus-stop-code">
-							{#await $serviceRoute then stops}
-								{stops[0].name}
+				<!-- Bus stop page -->
+				{#if showBusStop && $busStopArrivals}
+					{#await $busStopArrivals then arrivals}
+						<h2>{arrivals.busStopName}</h2>
+					{/await}
 
-								{#if stops[stops.length - 1].code !== stops[0].code}
-									to {stops[stops.length - 1].name}
-								{:else}
-									(loop service)
-								{/if}
-							{/await}
-						</span>
-					{/if}
+					<span class="bus-stop-code">{$page.params.busStopCode}</span>
+				{/if}
 
-					<!-- Bus stop page -->
-					{#if showBusStop && $busStopArrivals}
-						{#await $busStopArrivals then arrivals}
-							<h2>{arrivals.busStopName}</h2>
-						{/await}
+				<!-- Set 'quick destination' searchbar -->
+				{#if locationChipTarget}
+					<Searchbar
+						placeholder="Enter your {locationChipTarget} location"
+						bind:text={$locationChipSearch}
+					/>
+				{/if}
 
-						<span class="bus-stop-code">{$page.params.busStopCode}</span>
-					{/if}
+				<!-- Origin searchbar -->
+				{#if showOriginSearchbar}
+					<Searchbar
+						placeholder="Enter your origin"
+						bind:text={$originQuery.name}
+						redirect="select-origin"
+					/>
+				{/if}
 
-					<!-- Set 'quick destination' searchbar -->
-					{#if locationChipTarget}
-						<Searchbar
-							placeholder="Enter your {locationChipTarget} location"
-							bind:text={$locationChipSearch}
-						/>
-					{/if}
+				<!-- Destination searchbar -->
+				{#if showDestinationSearchbar}
+					<Searchbar
+						placeholder={$page.path === '/' ? 'Search' : 'Enter your destination'}
+						bind:text={$destinationQuery.name}
+						redirect="select-destination"
+					/>
+				{/if}
 
-					<!-- Origin searchbar -->
-					{#if showOriginSearchbar}
-						<Searchbar
-							placeholder="Enter your origin"
-							bind:text={$originQuery.name}
-							redirect="select-origin"
-						/>
-					{/if}
-
-					<!-- Destination searchbar -->
-					{#if showDestinationSearchbar}
-						<Searchbar
-							placeholder={$page.path === '/' ? 'Search' : 'Enter your destination'}
-							bind:text={$destinationQuery.name}
-							redirect="select-destination"
-						/>
-					{/if}
-
-					<!-- Route summary bar -->
-					{#if showRouteSummary}
-						<RouteTimeline route={selectedRoute} />
-						<div class="route-layout">
-							{@html getArriveTimeHTML(selectedRoute)}
-							{@html getDurationHTML(selectedRoute)}
-						</div>
-					{/if}
-				</div>
+				<!-- Route summary bar -->
+				{#if showRouteSummary}
+					<RouteTimeline route={selectedRoute} />
+					<div class="route-layout">
+						{@html getArriveTimeHTML(selectedRoute)}
+						{@html getDurationHTML(selectedRoute)}
+					</div>
+				{/if}
 			</div>
 		</div>
-	{/if}
+	</div>
+{/if}
 
-	<slot />
-</div>
+<slot />
 
 <style>
-	.everything {
-		position: absolute;
-		top: 0;
-		bottom: 0;
-		left: 0;
-		right: 0;
-		padding: var(--space);
-		overflow: scroll;
-		scroll-snap-type: y mandatory;
-		scroll-padding: var(--space);
-	}
-
 	h2 {
 		display: flex;
 		align-items: center;
@@ -210,10 +196,9 @@
 		border-radius: var(--border-radius);
 		color: var(--overlay);
 		background-color: var(--header);
-		box-shadow: var(--shadow); /* , 0 0 10px var(--space) var(--background);*/
+		box-shadow: var(--shadow), 0 0 10px var(--space) var(--background);
 		padding: var(--space);
 		margin-bottom: var(--space);
-		scroll-snap-align: start;
 	}
 
 	.vertical-stack {
