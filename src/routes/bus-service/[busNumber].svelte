@@ -11,16 +11,15 @@
 	{#await $serviceRoute}
 		Loading bus route...
 	{:then busStops}
-		<ol>
+		<div class="route">
 			{#each busStops as stop}
-				<li>
-					<a href="/bus-stop/{stop.code}/{stop.name}">
-						<h2>{stop.name}</h2>
-						<span class="stop-code">{stop.code}</span>
-					</a>
-				</li>
+				<a href="/bus-stop/{stop.code}">
+					<h2>{stop.name}</h2>
+					<span class="stop-code">{stop.code}</span>
+				</a>
+				<span class="segment" />
 			{/each}
-		</ol>
+		</div>
 	{/await}
 </Box>
 
@@ -35,13 +34,51 @@
 		font-size: 1rem;
 	}
 
-	ol {
-		margin: -18px 0;
-		padding: 0;
-		list-style-type: none;
+	.route {
+		display: flex;
+		flex-direction: column;
+		padding: var(--space) 0;
 	}
 
-	li {
-		margin: 18px 0;
+	.route > a {
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+
+		height: 5px;
+		padding-left: calc(var(--space) * 2);
+	}
+
+	.segment {
+		position: relative;
+		width: var(--space);
+		height: 60px;
+	}
+
+	.segment::before {
+		content: '';
+		position: absolute;
+		bottom: 0;
+		left: 0;
+		height: 100%;
+		width: 51%;
+		background: var(--header);
+		transform: skew(0deg, 30deg);
+	}
+
+	.segment::after {
+		content: '';
+		position: absolute;
+		bottom: 0;
+		right: 0;
+		height: 100%;
+		width: 50%;
+		background: var(--header);
+		transform: skew(0deg, -30deg);
+	}
+
+	/* Hide the last segment */
+	.segment:last-child {
+		display: none;
 	}
 </style>
