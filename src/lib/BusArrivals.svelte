@@ -8,9 +8,9 @@
 </script>
 
 {#if showHeader}
-	<h3 transition:fade>{arrivals.busStopName}</h3>
+	<h3>{arrivals.busStopName}</h3>
 {/if}
-<div class="bus-stop" transition:fade>
+<div class="bus-stop">
 	{#each arrivals.services as service}
 		<!-- Bus number -->
 		<h3 class="bus-number">{service.number}</h3>
