@@ -20,12 +20,17 @@
 		<span class="material-icons">
 			{{ SEA: 'person', SDA: 'group', LSD: 'groups' }[arrival.occupancy]}
 		</span>
-		<!-- <span>{arrival.type}</span> -->
-		<span class="material-icons"> directions_bus </span>
+		<span class="decks">{arrival.type[0] + arrival.type[1].toLowerCase()}</span>
+		<!-- <span class="material-icons"> directions_bus </span> -->
 	</span>
 </span>
 
 <style>
+	.decks {
+		color: var(--text);
+		font-weight: bold;
+	}
+
 	.info {
 		/* background-color: aqua; */
 		display: grid;

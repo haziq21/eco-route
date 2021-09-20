@@ -81,6 +81,11 @@
 		{:else if !nearbyArrivals}
 			<p>Loading bus arrivals...</p>
 		{:else}
+			<div class="deck-legends">
+				<span class="legend"><span class="symbol">Sd</span> Single decker</span>
+				<span class="legend"><span class="symbol">Dd</span> Double decker</span>
+				<span class="legend"><span class="symbol">Bd</span> Bendy</span>
+			</div>
 			{#each nearbyArrivals as busStop}
 				<BusArrivals arrivals={busStop} />
 			{/each}
@@ -125,6 +130,20 @@
 </Box>
 
 <style>
+	.deck-legends {
+		display: flex;
+		flex-direction: row;
+		justify-content: space-between;
+
+		margin: var(--space);
+		font-size: 0.7rem;
+	}
+
+	.symbol {
+		color: var(--icon-text);
+		font-weight: bold;
+	}
+
 	.bus-services {
 		display: flex;
 		flex-direction: row;
