@@ -136,7 +136,7 @@
 		justify-content: space-between;
 
 		margin: var(--space);
-		font-size: 0.7rem;
+		font-size: 0.8rem;
 	}
 
 	.symbol {
