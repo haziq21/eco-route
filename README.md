@@ -1,6 +1,6 @@
 # EcoRoute: A greener way to travel
 
-EcoRoute is a work-in-progress progressive web app meant to encourage car and taxi users in Singapore to switch to public transport.
+EcoRoute is a progressive web app meant to encourage car and taxi users in Singapore to switch to public transport. This app was made as a school project from 2021.
 
 ## Features
 
